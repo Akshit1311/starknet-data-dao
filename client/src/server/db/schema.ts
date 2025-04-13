@@ -37,4 +37,5 @@ export const nykaaOrders = pgTable(
 export const NykaaOrdersSchema = createInsertSchema(nykaaOrders).omit({
 	id: true,
 	updatedAt: true,
+	createdAt: true,
 });
