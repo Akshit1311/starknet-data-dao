@@ -6,9 +6,12 @@ export async function GET() {
 	return Response.json({ hi: "there" });
 }
 export async function POST(req: Request) {
-	const data = req.body;
+	const data = await req.text();
 
-	console.log({ data });
+	const decodedBody = decodeURIComponent(data);
+	const proof = JSON.parse(decodedBody);
 
-	return Response.json({ data });
+	console.log({ proof });
+
+	return Response.json({ proof });
 }
