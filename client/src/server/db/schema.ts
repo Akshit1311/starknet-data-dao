@@ -17,7 +17,7 @@ export const nykaaOrders = pgTable(
 		imageUrl: d.text().notNull(),
 		itemName: d.text().notNull(),
 		itemQuantity: d.integer().notNull(),
-		itemSku: d.text().notNull(),
+		itemSku: d.text().notNull().unique(),
 		itemStatus: d.text().notNull(),
 		orderNo: d.text().notNull(),
 		parentId: d.text().notNull(),

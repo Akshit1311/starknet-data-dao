@@ -19,9 +19,17 @@ export async function POST(req: Request) {
 			.array(NykaaOrdersSchema)
 			.parse(proof.publicData?.orders);
 
-		await db.insert(nykaaOrders).values(parsedData);
+		const insertedIds = await db
+			.insert(nykaaOrders)
+			.values(parsedData)
+			.onConflictDoNothing()
+			.returning({
+				id: nykaaOrders.id,
+			});
 
-		console.dir(proof, { depth: null });
+		console.dir({ proof }, { depth: null });
+
+		console.dir({ insertedIds }, { depth: null });
 
 		console.log({ orders: parsedData });
 
