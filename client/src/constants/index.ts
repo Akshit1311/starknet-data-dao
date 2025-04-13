@@ -1,3 +1,10 @@
+import {
+	NonBinary,
+	ReceiptCent,
+	Sword,
+	ZapIcon,
+	type LucideIcon,
+} from "lucide-react";
 import { constants, RpcProvider } from "starknet";
 
 export const CONNECTOR_NAMES = [
@@ -38,25 +45,48 @@ export function getExplorerEndpoint() {
 
 	return "https://sepolia.starkscan.co";
 }
-export const PROVIDER_IDS = {
-	AADHAAR_CARD_DATE_OF_BIRTH: "5e1302ca-a3dd-4ef8-bc25-24fcc97dc800",
-	AMAZON_ORDERS_ALL: "1d270ba2-8680-415b-b7e2-2cebd47f6f02",
-	TOTAL_GITHUB_REPOSITORIES: "5622b4ea-b953-4cd9-a377-409bb7ed5ec5",
-	NYKAA_ORDER_HISTORY: "43a0b71f-bd25-4f10-bbad-9541961df72e",
-	INSTAGRAM_FOLLOWERS_COUNT_VERIFIED: "7729ae3e-179c-4ac8-8c5d-4bcd909c864d",
-	GITHUB_USERNAME: "6d3f6753-7ee6-49ee-a545-62f1b1822ae5",
-	GMAIL_ACCOUNT: "f9f383fd-32d9-4c54-942f-5e9fda349762",
-	GITHUB_CONTRIBUTIONS_LAST_YEAR: "8573efb4-4529-47d3-80da-eaa7384dac19",
-	SEPHORA_ORDER_DETAILS: "9515ee7b-6ece-4795-a93e-022ee8c935cd",
-	LINKEDIN_USER_PROFILE_DETAILS: "a9f1063c-06b7-476a-8410-9ff6e427e637",
-	LINKEDIN_USER_PROFILE_V2: "b16c6781-4411-4bde-b1e6-c041df573f96",
-	LINKEDIN_CONNECTION_LIST_ICEBREAKER: "2551e533-f12a-4580-828a-3bfabd964e19",
-	LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2:
-		"3551e533-f12a-4580-828a-3bfabd964e20",
-	AMAZON_LAST_TWO_ORDER_DETAILS: "bcaa6b6b-632f-43ec-8de5-c7cc9113aacd",
-	TWITTER_FOLLOWING_FOLLOWERS_CREATION_DATE:
-		"aad95818-f726-4a34-be97-8d1f47631b03",
-	TWITTER_X_GET_ALL_TWEETS: "0b978e97-688f-4e9d-b27f-95a012cb46cc",
-	// NYKAA_ORDER_HISTORY_HUNTER_TEST: "43a0b71f-bd25-4f10-bbad-9541961df72f",
-	NAMECHEAP_OWNERSHIP_CHECK: "70f7a511-7719-449d-820f-02892a87a263",
+
+export type ProviderInfo = {
+	title: string;
+	icon: LucideIcon;
+	slug: string;
+	categories: {
+		categoryName: string;
+		categoryId: string;
+	}[];
+};
+
+export const PROVIDERS_INFO = {
+	LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2: {
+		title: "LinkedIn Connections",
+		icon: ReceiptCent,
+		categoryId: "3551e533-f12a-4580-828a-3bfabd964e20",
+	},
+	NYKAA_ORDER_HISTORY: {
+		title: "Nykka All Orders",
+		icon: NonBinary,
+		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+	},
+	// uber: {
+	// 	title: "Uber",
+	// 	icon: ZapIcon,
+	// 	slug: "uber",
+	// 	categories: [
+	// 		{
+	// 			categoryName: "",
+	// 			categoryId: "",
+	// 		},
+	// 	],
+	// },
+	// swiggy: {
+	// 	title: "Swiggy",
+	// 	icon: Sword,
+	// 	slug: "swiggy",
+	// 	categories: [
+	// 		{
+	// 			categoryName: "",
+	// 			categoryId: "",
+	// 		},
+	// 	],
+	// },
 } as const;

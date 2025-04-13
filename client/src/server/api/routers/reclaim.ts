@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { PROVIDER_IDS } from "~/constants";
-import { env } from "~/env";
 
+import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
+import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { ProviderSchema } from "~/types";
-import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
+import { PROVIDERS_INFO } from "~/constants";
 
 export const reclaimRouter = createTRPCRouter({
 	hello: publicProcedure
@@ -25,7 +25,7 @@ export const reclaimRouter = createTRPCRouter({
 			const reclaimProofRequest = await ReclaimProofRequest.init(
 				env.RECLAIM_APP_ID,
 				env.RECLAIM_APP_SECRET,
-				PROVIDER_IDS[input.provider],
+				PROVIDERS_INFO[input.provider].categoryId,
 			);
 
 			reclaimProofRequest.setAppCallbackUrl(
