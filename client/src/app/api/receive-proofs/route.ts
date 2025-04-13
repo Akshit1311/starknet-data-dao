@@ -1,4 +1,6 @@
-import { verifyProof } from "@reclaimprotocol/js-sdk";
+import { verifyProof, type Proof } from "@reclaimprotocol/js-sdk";
+import { db } from "~/server/db";
+import { nykaaOrders, NykaaOrdersSchema } from "~/server/db/schema";
 
 export const dynamic = "force-static";
 
@@ -9,9 +11,17 @@ export async function POST(req: Request) {
 	const data = await req.text();
 
 	const decodedBody = decodeURIComponent(data);
-	const proof = JSON.parse(decodedBody);
+	const proof: Proof = JSON.parse(decodedBody);
 
-	console.log({ proof });
+	const parsedData = NykaaOrdersSchema.safeParse(proof.publicData?.orders);
 
-	return Response.json({ proof });
+	if (parsedData.success) {
+		await db.insert(nykaaOrders).values(parsedData.data);
+
+		console.log({ orders: parsedData.data });
+
+		return Response.json({ message: "Updated data in db successfully" });
+	}
+
+	return Response.json({ message: "errored!" });
 }

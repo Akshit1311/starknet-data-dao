@@ -1,6 +1,8 @@
 import { sql } from "drizzle-orm";
 import { index, pgTable } from "drizzle-orm/pg-core";
 
+import { createInsertSchema } from "drizzle-zod";
+
 export const nykaaOrders = pgTable(
 	"nykaaOrders",
 	(d) => ({
@@ -31,3 +33,8 @@ export const nykaaOrders = pgTable(
 		index("product_id_idx").on(t.productId),
 	],
 );
+
+export const NykaaOrdersSchema = createInsertSchema(nykaaOrders).omit({
+	id: true,
+	updatedAt: true,
+});
