@@ -1,27 +1,33 @@
-// Example model schema from the Drizzle docs
-// https://orm.drizzle.team/docs/sql-schema-declaration
-
 import { sql } from "drizzle-orm";
 import { index, pgTable } from "drizzle-orm/pg-core";
 
-/**
- * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
- * database instance for multiple projects.
- *
- * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
- */
-// export const createTable = pgTableCreator((name) => `data-dao_${name}`);
-
-export const posts = pgTable(
-	"post",
+export const nykaaOrders = pgTable(
+	"nykaaOrders",
 	(d) => ({
-		id: d.integer().primaryKey().generatedByDefaultAsIdentity(),
-		name: d.varchar({ length: 256 }),
+		id: d.serial().primaryKey(),
+		brandIds: d.text().notNull(),
+		brandNames: d.text().array().notNull(),
+		categoryId: d.text().notNull(),
 		createdAt: d
 			.timestamp({ withTimezone: true })
 			.default(sql`CURRENT_TIMESTAMP`)
 			.notNull(),
+		imageUrl: d.text().notNull(),
+		itemName: d.text().notNull(),
+		itemQuantity: d.integer().notNull(),
+		itemSku: d.text().notNull(),
+		itemStatus: d.text().notNull(),
+		orderNo: d.text().notNull(),
+		parentId: d.text().notNull(),
+		productId: d.text().notNull(),
+		productUrl: d.text().notNull(),
+		unitPrice: d.integer().notNull(),
 		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
 	}),
-	(t) => [index("name_idx").on(t.name)],
+	(t) => [
+		index("product_sku_idx").on(t.itemSku),
+		index("product_order_idx").on(t.orderNo),
+		index("product_brand_idx").on(t.brandIds),
+		index("product_id_idx").on(t.productId),
+	],
 );
