@@ -95,3 +95,20 @@ export const copyAddressToClipboard = (address: string) => {
   navigator.clipboard.writeText(address);
   toast("Address copied to clipboard");
 };
+
+export const logger = {
+  debug<Args extends unknown[]>(message: string, ...args: Args): void {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(`[DEBUG] ${message}`, ...args);
+    }
+  },
+  info<Args extends unknown[]>(message: string, ...args: Args): void {
+    console.info(`[INFO] ${message}`, ...args);
+  },
+  warn<Args extends unknown[]>(message: string, ...args: Args): void {
+    console.warn(`[WARN] ${message}`, ...args);
+  },
+  error<Args extends unknown[]>(message: string, ...args: Args): void {
+    console.error(`[ERROR] ${message}`, ...args);
+  },
+};
