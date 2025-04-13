@@ -27,8 +27,6 @@ export async function POST(req: Request) {
 				id: nykaaOrders.id,
 			});
 
-		console.dir({ proof }, { depth: null });
-
 		console.dir({ insertedIds }, { depth: null });
 
 		console.log({ orders: parsedData });
