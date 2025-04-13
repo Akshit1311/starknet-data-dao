@@ -1,3 +1,10 @@
+import {
+  NonBinary,
+  ReceiptCent,
+  Sword,
+  ZapIcon,
+  type LucideIcon,
+} from "lucide-react";
 import { constants, RpcProvider } from "starknet";
 
 export const CONNECTOR_NAMES = [
@@ -39,5 +46,39 @@ export function getExplorerEndpoint() {
   return "https://sepolia.starkscan.co";
 }
 export const PROVIDER_IDS = {
-	NYKAA_ORDER_HISTORY: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+  NYKAA_ORDER_HISTORY: "43a0b71f-bd25-4f10-bbad-9541961df72e",
 } as const;
+
+export type ProviderInfo = {
+  title: string;
+  icon: LucideIcon;
+  slug: string;
+  providerId: string;
+};
+
+export const PROVIDERS_INFO = [
+  {
+    title: "Zomato",
+    icon: ReceiptCent,
+    slug: "zomato",
+    providerId: "",
+  },
+  {
+    title: "Nykka",
+    icon: NonBinary,
+    slug: "nykka",
+    providerId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+  },
+  {
+    title: "Uber",
+    icon: ZapIcon,
+    slug: "uber",
+    providerId: "",
+  },
+  {
+    title: "Swiggy",
+    icon: Sword,
+    slug: "swiggy",
+    providerId: "",
+  },
+];

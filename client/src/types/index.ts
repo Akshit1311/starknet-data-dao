@@ -11,20 +11,3 @@ export const ProviderSchema = z.custom<TProviders>();
 export type TPublicData = {
 	[key: string]: string;
 };
-
-export const productSchema = z.object({
-	brandIds: z.string(),
-	brandNames: z.array(z.string()),
-	categoryId: z.string(),
-	createdAt: z.string(),
-	imageUrl: z.string().url(),
-	itemName: z.string(),
-	itemQuantity: z.number(),
-	itemSku: z.string(),
-	itemStatus: z.string(),
-	orderNo: z.string(),
-	parentId: z.string(),
-	productId: z.string(),
-	productUrl: z.string().url(),
-	unitPrice: z.number(),
-});
