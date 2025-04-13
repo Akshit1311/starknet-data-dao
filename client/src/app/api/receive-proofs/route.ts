@@ -68,7 +68,7 @@ export async function POST(req: Request) {
 			return Response.json({ message: "Updated data in db successfully" });
 		}
 
-		return Response.json({ message: "errored!" }, { status: 500 });
+		return Response.json({ message: "zod failed!" }, { status: 400 });
 	} catch (error) {
 		console.log({ message: "errored!" });
 

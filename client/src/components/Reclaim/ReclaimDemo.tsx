@@ -3,7 +3,7 @@
 import { useState } from "react";
 import QRCode from "react-qr-code";
 import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
-import type { TProofs, TPublicData } from "~/types";
+import type { TProofs, TProviders, TPublicData } from "~/types";
 import { Button } from "../ui/button";
 import { api } from "~/trpc/react";
 
@@ -17,13 +17,13 @@ function ReclaimDemo() {
 
 	const { mutateAsync } = api.reclaim.generateConfig.useMutation();
 
-	const getVerificationReq = async () => {
+	const getVerificationReq = async (provider: TProviders) => {
 		// Your credentials from the Reclaim Developer Portal
 		// Replace these with your actual credentials
 
 		// Initialize the Reclaim SDK with your credentials
 		const { reclaimProofRequestConfig } = await mutateAsync({
-			provider: "LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2",
+			provider,
 		});
 
 		const reclaimProofRequest = await ReclaimProofRequest.fromJsonString(
@@ -88,7 +88,18 @@ function ReclaimDemo() {
 
 	return (
 		<>
-			<Button onClick={getVerificationReq}>Get Verification Request</Button>
+			<Button onClick={() => getVerificationReq("NYKAA_ORDER_HISTORY")}>
+				NYKAA_ORDER_HISTORY
+			</Button>
+			<Button
+				onClick={() =>
+					getVerificationReq(
+						"LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2",
+					)
+				}
+			>
+				LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2
+			</Button>
 
 			{/* Display QR code when URL is available */}
 
