@@ -14,7 +14,7 @@ export default async function Home() {
 						id="grid-container"
 						className="text-foreground grid w-full sm:grid-cols-2 gap-10 grid-cols-3"
 					>
-						{PROVIDERS_INFO.map((provider) => (
+						{Object.values(PROVIDERS_INFO).map((provider) => (
 							<Link
 								href={`/provider/${provider.slug}`}
 								className="border-border shadow-shadow text-main-foreground rounded-base bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY border-2 p-5 transition-all hover:shadow-none"

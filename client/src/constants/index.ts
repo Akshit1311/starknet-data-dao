@@ -53,32 +53,55 @@ export type ProviderInfo = {
   title: string;
   icon: LucideIcon;
   slug: string;
-  providerId: string;
+  categories: {
+    categoryName: string;
+    categoryId: string;
+  }[];
 };
 
-export const PROVIDERS_INFO = [
-  {
+export const PROVIDERS_INFO: Record<string, ProviderInfo> = {
+  zomato: {
     title: "Zomato",
     icon: ReceiptCent,
     slug: "zomato",
-    providerId: "",
+    categories: [
+      {
+        categoryName: "",
+        categoryId: "",
+      },
+    ],
   },
-  {
+  nykka: {
     title: "Nykka",
     icon: NonBinary,
     slug: "nykka",
-    providerId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+    categories: [
+      {
+        categoryName: "NYKAA_ORDER_HISTORY",
+        categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+      },
+    ],
   },
-  {
+  uber: {
     title: "Uber",
     icon: ZapIcon,
     slug: "uber",
-    providerId: "",
+    categories: [
+      {
+        categoryName: "",
+        categoryId: "",
+      },
+    ],
   },
-  {
+  swiggy: {
     title: "Swiggy",
     icon: Sword,
     slug: "swiggy",
-    providerId: "",
+    categories: [
+      {
+        categoryName: "",
+        categoryId: "",
+      },
+    ],
   },
-];
+};

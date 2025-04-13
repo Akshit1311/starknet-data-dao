@@ -1,41 +1,39 @@
 import { z } from "zod";
-import { PROVIDER_IDS } from "~/constants";
-import { env } from "~/env";
 
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { ProviderSchema } from "~/types";
 import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
+import { env } from "~/env";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
 export const reclaimRouter = createTRPCRouter({
-	hello: publicProcedure
-		.input(z.object({ text: z.string() }))
-		.mutation(({ input }) => {
-			return {
-				greeting: `Hello ${input.text}`,
-			};
-		}),
+  hello: publicProcedure
+    .input(z.object({ text: z.string() }))
+    .mutation(({ input }) => {
+      return {
+        greeting: `Hello ${input.text}`,
+      };
+    }),
 
-	generateConfig: publicProcedure
-		.input(
-			z.object({
-				provider: ProviderSchema,
-			}),
-		)
-		.mutation(async ({ input }) => {
-			const reclaimProofRequest = await ReclaimProofRequest.init(
-				env.RECLAIM_APP_ID,
-				env.RECLAIM_APP_SECRET,
-				PROVIDER_IDS[input.provider],
-			);
+  generateConfig: publicProcedure
+    .input(
+      z.object({
+        providerId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const reclaimProofRequest = await ReclaimProofRequest.init(
+        env.RECLAIM_APP_ID,
+        env.RECLAIM_APP_SECRET,
+        input.providerId
+      );
 
-			reclaimProofRequest.setAppCallbackUrl(
-				"https://bankai-data-dao.vercel.app/api/receive-proofs",
-			);
+      reclaimProofRequest.setAppCallbackUrl(
+        "https://bankai-data-dao.vercel.app/api/receive-proofs"
+      );
 
-			const reclaimProofRequestConfig = reclaimProofRequest.toJsonString();
+      const reclaimProofRequestConfig = reclaimProofRequest.toJsonString();
 
-			return {
-				reclaimProofRequestConfig,
-			};
-		}),
+      return {
+        reclaimProofRequestConfig,
+      };
+    }),
 });

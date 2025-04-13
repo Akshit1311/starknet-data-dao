@@ -12,12 +12,23 @@ import { Button } from "./ui/button";
 
 interface ProviderProps {
 	providerSlug: string;
+	orderName: string;
 }
 
-const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
-	const providerInfo = PROVIDERS_INFO.find(
-		(provider) => provider.slug === providerSlug,
-	);
+const Provider: React.FC<ProviderProps> = ({ providerSlug, orderName }) => {
+	const providerInfo = PROVIDERS_INFO[providerSlug];
+
+	if (!providerInfo) {
+		return <div>Provider not found</div>;
+	}
+
+	const providerId = providerInfo.categories.find(
+		(category) => category.categoryName === orderName,
+	)?.categoryId;
+
+	if (!providerId) {
+		return <div>Provider ID not found</div>;
+	}
 
 	// State to store the verification request URL
 	const [requestUrl, setRequestUrl] = React.useState("");
@@ -34,7 +45,7 @@ const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
 
 		// Initialize the Reclaim SDK with your credentials
 		const { reclaimProofRequestConfig } = await mutateAsync({
-			provider: "NYKAA_ORDER_HISTORY",
+			providerId,
 		});
 
 		const reclaimProofRequest = await ReclaimProofRequest.fromJsonString(
