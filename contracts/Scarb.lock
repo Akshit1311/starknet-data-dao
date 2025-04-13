@@ -2,7 +2,7 @@
 version = 1
 
 [[package]]
-name = "contracts"
+name = "data_dao"
 version = "0.1.0"
 dependencies = [
  "snforge_std",
