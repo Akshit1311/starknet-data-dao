@@ -156,8 +156,8 @@ const Navbar = () => {
 	}, [disconnectAsync]);
 
 	const navLinks = [
-		{ href: "/app", text: "Docs" },
-		{ href: "/providers", text: "Components" },
+		{ href: "/", text: "App" },
+		{ href: "/providers", text: "Providers" },
 	];
 
 	return (
@@ -220,7 +220,7 @@ const Navbar = () => {
 								type="button"
 								aria-label="Disconnect wallet"
 							>
-								<X className="size-4 text-[#646498]" />
+								<X className="size-4 text-black/70" />
 							</button>
 						</div>
 					)}
