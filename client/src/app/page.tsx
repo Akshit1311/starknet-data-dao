@@ -14,15 +14,15 @@ export default async function Home() {
 						id="grid-container"
 						className="text-foreground grid w-full sm:grid-cols-2 gap-10 grid-cols-3"
 					>
-						{Object.entries(PROVIDERS_INFO).map(([key, value]) => (
+						{Object.values(PROVIDERS_INFO).map((provider) => (
 							<Link
-								href={`/provider/${key}`}
+								href={`/provider/${provider.slug}`}
 								className="border-border shadow-shadow text-main-foreground rounded-base bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY border-2 p-5 transition-all hover:shadow-none"
-								key={value.title}
+								key={provider.title}
 							>
-								<value.icon />
+								<provider.icon />
 								<p className="font-heading mt-3 text-lg sm:text-xl">
-									{value.title}
+									{provider.title}
 								</p>
 							</Link>
 						))}

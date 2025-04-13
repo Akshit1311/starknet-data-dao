@@ -1,10 +1,4 @@
-import {
-	NonBinary,
-	ReceiptCent,
-	Sword,
-	ZapIcon,
-	type LucideIcon,
-} from "lucide-react";
+import { NonBinary, ReceiptCent, type LucideIcon } from "lucide-react";
 import { constants, RpcProvider } from "starknet";
 
 export const CONNECTOR_NAMES = [
@@ -49,44 +43,24 @@ export function getExplorerEndpoint() {
 export type ProviderInfo = {
 	title: string;
 	icon: LucideIcon;
+	categoryName: string;
+	categoryId: string;
 	slug: string;
-	categories: {
-		categoryName: string;
-		categoryId: string;
-	}[];
 };
 
-export const PROVIDERS_INFO = {
-	LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2: {
+export const PROVIDERS_INFO: Record<string, ProviderInfo> = {
+	linkedInConnections: {
 		title: "LinkedIn Connections",
 		icon: ReceiptCent,
 		categoryId: "3551e533-f12a-4580-828a-3bfabd964e20",
+		categoryName: "LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2",
+		slug: "linkedin-connections",
 	},
-	NYKAA_ORDER_HISTORY: {
-		title: "Nykka All Orders",
+	nykaaOrders: {
+		title: "Nykka Orders",
 		icon: NonBinary,
 		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+		categoryName: "NYKAA_ORDER_HISTORY",
+		slug: "nykaa-orders",
 	},
-	// uber: {
-	// 	title: "Uber",
-	// 	icon: ZapIcon,
-	// 	slug: "uber",
-	// 	categories: [
-	// 		{
-	// 			categoryName: "",
-	// 			categoryId: "",
-	// 		},
-	// 	],
-	// },
-	// swiggy: {
-	// 	title: "Swiggy",
-	// 	icon: Sword,
-	// 	slug: "swiggy",
-	// 	categories: [
-	// 		{
-	// 			categoryName: "",
-	// 			categoryId: "",
-	// 		},
-	// 	],
-	// },
-} as const;
+};

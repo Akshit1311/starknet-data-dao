@@ -4,7 +4,6 @@ import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
 import React from "react";
 import QRCode from "react-qr-code";
 
-import { PROVIDERS_INFO } from "~/constants";
 import { api } from "~/trpc/react";
 import type { TProofs, TProviders, TPublicData } from "~/types";
 
@@ -15,12 +14,6 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
-	const providerInfo = PROVIDERS_INFO[providerSlug];
-
-	if (!providerInfo) {
-		return <div>Provider not found</div>;
-	}
-
 	// State to store the verification request URL
 	const [requestUrl, setRequestUrl] = React.useState("");
 	const [publicData, setPublicData] = React.useState<TPublicData | undefined>(
@@ -36,7 +29,7 @@ const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
 
 		// Initialize the Reclaim SDK with your credentials
 		const { reclaimProofRequestConfig } = await mutateAsync({
-			provider: providerSlug,
+			providerSlug,
 		});
 
 		const reclaimProofRequest = await ReclaimProofRequest.fromJsonString(

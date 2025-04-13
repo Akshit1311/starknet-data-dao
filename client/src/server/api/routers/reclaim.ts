@@ -1,10 +1,11 @@
+import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
 import { z } from "zod";
 
-import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
+import { PROVIDERS_INFO } from "~/constants";
 import { env } from "~/env";
+import { logger } from "~/lib/utils";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { ProviderSchema } from "~/types";
-import { PROVIDERS_INFO } from "~/constants";
 
 export const reclaimRouter = createTRPCRouter({
 	hello: publicProcedure
@@ -18,14 +19,25 @@ export const reclaimRouter = createTRPCRouter({
 	generateConfig: publicProcedure
 		.input(
 			z.object({
-				provider: ProviderSchema,
+				providerSlug: ProviderSchema,
 			}),
 		)
 		.mutation(async ({ input }) => {
+			const providerSlug = input.providerSlug;
+
+			const categoryId = Object.values(PROVIDERS_INFO).find(
+				(provider) => provider.slug === providerSlug,
+			)?.categoryId;
+
+			if (!categoryId) {
+				logger.error(`Category ID not found for provider: ${providerSlug}`);
+				throw new Error("Invalid provider slug");
+			}
+
 			const reclaimProofRequest = await ReclaimProofRequest.init(
 				env.RECLAIM_APP_ID,
 				env.RECLAIM_APP_SECRET,
-				PROVIDERS_INFO[input.provider].categoryId,
+				categoryId,
 			);
 
 			reclaimProofRequest.setAppCallbackUrl(
