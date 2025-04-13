@@ -6,7 +6,7 @@ export async function GET() {
 	return Response.json({ hi: "there" });
 }
 export async function POST(req: Request) {
-	const data = await req.json();
+	const data = req.body;
 
 	console.log({ data });
 
