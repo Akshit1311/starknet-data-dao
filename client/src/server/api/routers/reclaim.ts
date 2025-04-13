@@ -28,9 +28,9 @@ export const reclaimRouter = createTRPCRouter({
 				PROVIDER_IDS[input.provider],
 			);
 
-			// reclaimProofRequest.setAppCallbackUrl(
-			// 	"https://bankai-data-dao.vercel.app/api/receive-proofs",
-			// );
+			reclaimProofRequest.setAppCallbackUrl(
+				"https://bankai-data-dao.vercel.app/api/receive-proofs",
+			);
 
 			const reclaimProofRequestConfig = reclaimProofRequest.toJsonString();
 
