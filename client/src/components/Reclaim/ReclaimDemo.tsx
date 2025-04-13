@@ -15,7 +15,7 @@ function ReclaimDemo() {
 	);
 	const [proofs, setProofs] = useState<TProofs>([]);
 
-	const { mutateAsync } = api.reclaim.generateConfig.useMutation();
+	const { mutateAsync, isPending } = api.reclaim.generateConfig.useMutation();
 
 	const getVerificationReq = async (provider: TProviders) => {
 		// Your credentials from the Reclaim Developer Portal
@@ -89,7 +89,7 @@ function ReclaimDemo() {
 	return (
 		<>
 			<Button onClick={() => getVerificationReq("NYKAA_ORDER_HISTORY")}>
-				NYKAA_ORDER_HISTORY
+				{isPending ? "Loading..." : "NYKAA_ORDER_HISTORY"}
 			</Button>
 			<Button
 				onClick={() =>
@@ -98,7 +98,9 @@ function ReclaimDemo() {
 					)
 				}
 			>
-				LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2
+				{isPending
+					? "Loading..."
+					: "LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2"}
 			</Button>
 
 			{/* Display QR code when URL is available */}

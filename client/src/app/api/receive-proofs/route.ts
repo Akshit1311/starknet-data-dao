@@ -50,6 +50,8 @@ export async function POST(req: Request) {
 		// linkedin
 		const parsedLinkedInData = LinkedInResSchema.safeParse(proof.publicData);
 
+		console.dir({ parsedLinkedInData }, { depth: null });
+
 		if (parsedLinkedInData.success) {
 			const insertedIds = await db
 				.insert(linkedinConnections)

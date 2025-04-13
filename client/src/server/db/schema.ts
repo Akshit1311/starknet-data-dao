@@ -47,10 +47,10 @@ export const linkedinConnections = pgTable("linkedinConnections", (d) => ({
 		.timestamp({ withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull(),
-	headline: d.text().notNull(),
-	name: d.text().notNull(),
-	pfp: d.text().notNull(),
-	url: d.text().notNull().unique(),
+	headline: d.text(),
+	name: d.text(),
+	pfp: d.text(),
+	url: d.text().unique(),
 }));
 
 export const LinkedinConnectionsSchema = createInsertSchema(
