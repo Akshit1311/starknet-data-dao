@@ -39,3 +39,24 @@ export const NykaaOrdersSchema = createInsertSchema(nykaaOrders).omit({
 	updatedAt: true,
 	createdAt: true,
 });
+
+export const linkedinConnections = pgTable("linkedinConnections", (d) => ({
+	id: d.serial().primaryKey(),
+	updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+	createdAt: d
+		.timestamp({ withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull(),
+	headline: d.text().notNull(),
+	name: d.text().notNull(),
+	pfp: d.text().notNull(),
+	url: d.text().notNull().unique(),
+}));
+
+export const LinkedinConnectionsSchema = createInsertSchema(
+	linkedinConnections,
+).omit({
+	id: true,
+	updatedAt: true,
+	createdAt: true,
+});

@@ -23,7 +23,7 @@ function ReclaimDemo() {
 
 		// Initialize the Reclaim SDK with your credentials
 		const { reclaimProofRequestConfig } = await mutateAsync({
-			provider: "NYKAA_ORDER_HISTORY",
+			provider: "LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2",
 		});
 
 		const reclaimProofRequest = await ReclaimProofRequest.fromJsonString(
