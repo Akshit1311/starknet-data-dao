@@ -1,5 +1,6 @@
-import { NonBinary, ReceiptCent, type LucideIcon } from "lucide-react";
 import { constants, RpcProvider } from "starknet";
+
+import { Icons } from "~/components/Icons";
 
 export const CONNECTOR_NAMES = [
 	"Braavos",
@@ -40,28 +41,20 @@ export function getExplorerEndpoint() {
 	return "https://sepolia.starkscan.co";
 }
 
-export type ProviderInfo = {
-	title: string;
-	icon: LucideIcon;
-	categoryName: string;
-	categoryId: string;
-	slug: string;
-};
-
 export const PROVIDERS_INFO = {
 	"linkedin-connections": {
 		title: "LinkedIn Connections",
-		icon: ReceiptCent,
+		icon: "/icons/linkedin.svg",
 		categoryId: "3551e533-f12a-4580-828a-3bfabd964e20",
 	},
 	"nykaa-orders": {
 		title: "Nykka Orders",
-		icon: NonBinary,
+		icon: "/icons/nykka.svg",
 		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
 	},
 	"zomato-orders": {
 		title: "Zomato Orders",
-		icon: NonBinary,
+		icon: "/icons/zomato.svg",
 		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
 	},
 } as const;

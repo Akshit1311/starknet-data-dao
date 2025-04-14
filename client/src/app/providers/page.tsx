@@ -1,7 +1,9 @@
 import type { NextPage } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { PROVIDERS_INFO } from "~/constants";
+import { cn } from "~/lib/utils";
 import { HydrateClient } from "~/trpc/server";
 
 const ProvidersPage: NextPage = () => {
@@ -19,9 +21,27 @@ const ProvidersPage: NextPage = () => {
 								className="border-border shadow-shadow text-main-foreground rounded-base bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY border-2 p-5 transition-all hover:shadow-none"
 								key={key}
 							>
-								<provider.icon />
-								<p className="font-heading mt-3 text-lg sm:text-xl">
+								<Image
+									src={provider.icon}
+									alt={provider.title}
+									width={52}
+									height={52}
+									className={cn("rounded-md", {
+										"size-10": provider.title.toLowerCase().includes("nykka"),
+									})}
+								/>
+								<h4
+									className={cn("font-heading mt-3 text-lg sm:text-xl", {
+										"mt-6": provider.title.toLowerCase().includes("nykka"),
+									})}
+								>
 									{provider.title}
+								</h4>
+								<p className="text-base mt-2 text-muted-foreground max-w-[300px]">
+									Lorem ipsum dolor sit amet consectetur adipisicing elit.
+									Voluptates, consequatur architecto laborum possimus cum nam
+									amet voluptatum odio ut necessitatibus perferendis qui ipsum
+									non sapiente?
 								</p>
 							</Link>
 						))}
