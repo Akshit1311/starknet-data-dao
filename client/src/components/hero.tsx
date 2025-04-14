@@ -2,11 +2,12 @@
 
 import { animate, stagger, useInView } from "motion/react";
 import { Manrope } from "next/font/google";
-import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useRef } from "react";
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 
 import { cn } from "~/lib/utils";
+
 import { Button } from "./ui/button";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "700"] });
@@ -21,10 +22,10 @@ export function HeroSection() {
 	return (
 		<div
 			ref={ref}
-			className="w-full bg-linear-to-t from-gray-50/75 to-gray-50/50 dark:bg-neutral-800 min-h-[100dvh]"
+			className="w-full bg-linear-to-t flex items-center justify-center from-gray-50/75 to-gray-50/50 dark:bg-neutral-800 min-h-[100dvh]"
 		>
-			<div className="mx-auto grid  h-full max-w-7xl grid-cols-1 items-start gap-10 overflow-hidden py-10 sm:grid-cols-2 md:pt-28 lg:grid-cols-3">
-				<div className="px-4 py-10 md:px-12 md:py-10 lg:col-span-2">
+			<div className="mx-auto max-w-7xl pt-16 lg:pt-0 flex flex-col lg:flex-row items-center justify-between gap-10 overflow-hidden">
+				<div className="px-4 py-10 md:px-12 md:py-10">
 					<RoughNotationGroup show={isInView}>
 						<h2
 							className={cn(
@@ -32,52 +33,46 @@ export function HeroSection() {
 								manrope.className,
 							)}
 						>
-							Your favourite{" "}
+							Your trusted data{" "}
 							<RoughNotation
 								type="highlight"
 								animationDuration={2000}
 								iterations={3}
-								color="#00C8EF"
+								color="#00C8EF30"
 								multiline
 							>
-								<span className="text-currentColor">productivity tool</span>
+								<span className="text-currentColor">sovereignty tool</span>
 							</RoughNotation>{" "}
-							for Data Dao{" "}
-							{/* <RoughNotation
-								type="underline"
-								animationDuration={2000}
-								iterations={10}
-								color="#00C8EF"
-							>
-								mobile
-							</RoughNotation> */}
+							for DAOs{" "}
 						</h2>
 						<p className="mt-4 max-w-2xl text-center text-sm text-neutral-500 sm:text-left md:mt-10 md:text-lg dark:text-neutral-400">
-							Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam
-							similique neque vitae eos laborum nihil amet provident natus
-							doloribus tempore expedita, laudantium soluta, eligendi officia.
+							Transform how your DAO manages data with Reclaim Protocol.
+							Securely verify, share, and monetize information—no
+							intermediaries, no exploitation.
+							<br />
 							<RoughNotation
 								type="underline"
 								animationDuration={2000}
 								iterations={3}
 								color="#00C8EF"
 							>
-								20% discount
+								20% early-bird
 							</RoughNotation>{" "}
-							and take your productivity to the next level.
+							discount for founding members. Take your data governance to the
+							next level. and take your productivity to the next level.
 						</p>
 					</RoughNotationGroup>
-					<div className="mt-10 flex flex-col items-center gap-4 [perspective:800px] sm:flex-row">
-						<Button className="w-full origin-left rounded-lg bg-[#00C8EF] px-4 py-2 text-base font-bold text-black transition duration-200 hover:shadow-lg hover:[transform:rotateX(10deg)] sm:w-auto">
-							Get started
-						</Button>
-						{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-						<button className="rounded-lg border border-transparent px-4 py-2 text-base text-black transition duration-200 hover:border-[#00C8EF] dark:text-white">
-							yooooooooooo
-						</button>
+
+					<div className="mt-10 flex flex-col items-center justify-center lg:justify-start gap-4 [perspective:800px] sm:flex-row">
+						<Link href={"/providers"}>
+							<Button className="w-full cursor-pointer origin-left rounded-lg bg-[#00C8EF] px-4 py-2 text-base font-bold text-black transition duration-200 hover:shadow-lg hover:[transform:rotateX(10deg)] sm:w-auto">
+								Get started
+							</Button>
+						</Link>
 					</div>
 				</div>
-				<div className="relative flex h-full w-full flex-shrink-0 justify-end overflow-hidden">
+
+				<div className="relative flex h-full flex-shrink-0 justify-end overflow-hidden">
 					<Skeleton />
 				</div>
 			</div>
@@ -119,44 +114,14 @@ export const Skeleton = () => {
 				}}
 				className="absolute inset-0 mx-auto h-[600px] w-full max-w-[360px] dark:invert dark:filter"
 			/>
-			<div className="relative z-20 mt-0 flex flex-col gap-4 px-8 md:mt-10">
-				<div className="first rounded-lg bg-gray-100 p-2 text-sm text-neutral-800 opacity-0 dark:bg-neutral-700 dark:text-neutral-100">
-					Hey! Please show me my latest images from my latest trip.
-				</div>
-				<div className="second rounded-lg bg-gray-100 p-2 text-sm text-neutral-800 opacity-0 dark:bg-neutral-700 dark:text-neutral-100">
-					Sure, here are the latest images from your trip to the island of deez
-					nuts.
-				</div>
-				<div className="images grid grid-cols-2 gap-2">
-					<img
-						src="https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?q=80&w=2992&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-						alt="island 1"
-						height="200"
-						width="200"
-						className="image h-full max-h-[100px] w-full rounded-lg object-cover opacity-0"
-					/>{" "}
-					<img
-						src="https://images.unsplash.com/photo-1509233725247-49e657c54213?q=80&w=3449&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-						alt="island 1"
-						height="200"
-						width="200"
-						className="image h-full max-h-[100px] w-full rounded-lg object-cover opacity-0"
-					/>
-					<img
-						src="https://images.unsplash.com/photo-1473116763249-2faaef81ccda?q=80&w=3592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-						alt="island 1"
-						height="200"
-						width="200"
-						className="image h-full max-h-[100px] w-full rounded-lg object-cover opacity-0"
-					/>{" "}
-					<img
-						src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=3070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-						alt="island 1"
-						height="200"
-						width="200"
-						className="image h-full max-h-[100px] w-full rounded-lg object-cover opacity-0"
-					/>
-				</div>
+			<div className="relative z-20 flex flex-col gap-4 px-[7px] -mt-[76px]">
+				<video
+					src="/video.mp4"
+					autoPlay
+					loop
+					muted
+					className="rounded-tl-[56px] rounded-tr-[56px]"
+				/>
 			</div>
 		</div>
 	);
