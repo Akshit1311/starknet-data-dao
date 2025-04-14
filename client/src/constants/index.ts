@@ -48,19 +48,20 @@ export type ProviderInfo = {
 	slug: string;
 };
 
-export const PROVIDERS_INFO: Record<string, ProviderInfo> = {
-	linkedInConnections: {
+export const PROVIDERS_INFO = {
+	"linkedin-connections": {
 		title: "LinkedIn Connections",
 		icon: ReceiptCent,
 		categoryId: "3551e533-f12a-4580-828a-3bfabd964e20",
-		categoryName: "LINKEDIN_CONNECTION_LIST_HANDLE_URL_ICEBREAKER_V2",
-		slug: "linkedin-connections",
 	},
-	nykaaOrders: {
+	"nykaa-orders": {
 		title: "Nykka Orders",
 		icon: NonBinary,
 		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
-		categoryName: "NYKAA_ORDER_HISTORY",
-		slug: "nykaa-orders",
 	},
-};
+	"zomato-orders": {
+		title: "Zomato Orders",
+		icon: NonBinary,
+		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+	},
+} as const;

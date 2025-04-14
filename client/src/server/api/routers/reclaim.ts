@@ -25,9 +25,7 @@ export const reclaimRouter = createTRPCRouter({
 		.mutation(async ({ input }) => {
 			const providerSlug = input.providerSlug;
 
-			const categoryId = Object.values(PROVIDERS_INFO).find(
-				(provider) => provider.slug === providerSlug,
-			)?.categoryId;
+			const categoryId = PROVIDERS_INFO[input.providerSlug].categoryId;
 
 			if (!categoryId) {
 				logger.error(`Category ID not found for provider: ${providerSlug}`);

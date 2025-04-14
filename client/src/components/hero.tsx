@@ -19,8 +19,11 @@ export function HeroSection() {
 	const isInView = useInView(ref);
 
 	return (
-		<div ref={ref} className="w-full bg-gray-50 dark:bg-neutral-800">
-			<div className="mx-auto grid max-h-[50rem] max-w-7xl grid-cols-1 items-start gap-10 overflow-hidden py-10 sm:grid-cols-2 md:max-h-[44rem] md:pt-28 lg:grid-cols-3">
+		<div
+			ref={ref}
+			className="w-full bg-linear-to-t from-gray-50/75 to-gray-50/50 dark:bg-neutral-800 min-h-[100dvh]"
+		>
+			<div className="mx-auto grid  h-full max-w-7xl grid-cols-1 items-start gap-10 overflow-hidden py-10 sm:grid-cols-2 md:pt-28 lg:grid-cols-3">
 				<div className="px-4 py-10 md:px-12 md:py-10 lg:col-span-2">
 					<RoughNotationGroup show={isInView}>
 						<h2

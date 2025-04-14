@@ -8,7 +8,7 @@ export type TProofs = string[] | string | Proof | Proof[] | undefined;
 export type TProviders = keyof typeof PROVIDERS_INFO;
 
 export const ProviderSchema = z.custom<TProviders>((val) => {
-	const slugs = Object.values(PROVIDERS_INFO).map((provider) => provider.slug);
+	const slugs = Object.keys(PROVIDERS_INFO).map((provider) => provider);
 
 	return slugs.includes(val);
 });

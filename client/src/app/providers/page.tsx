@@ -13,11 +13,11 @@ const ProvidersPage: NextPage = () => {
 						id="grid-container"
 						className="text-foreground grid w-full sm:grid-cols-2 gap-10 grid-cols-3"
 					>
-						{Object.values(PROVIDERS_INFO).map((provider) => (
+						{Object.entries(PROVIDERS_INFO).map(([key, provider]) => (
 							<Link
-								href={`/provider/${provider.slug}`}
+								href={`/provider/${key}`}
 								className="border-border shadow-shadow text-main-foreground rounded-base bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY border-2 p-5 transition-all hover:shadow-none"
-								key={provider.title}
+								key={key}
 							>
 								<provider.icon />
 								<p className="font-heading mt-3 text-lg sm:text-xl">
