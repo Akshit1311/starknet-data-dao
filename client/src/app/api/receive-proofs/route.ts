@@ -1,4 +1,4 @@
-import { verifyProof, type Proof } from "@reclaimprotocol/js-sdk";
+import type { Proof } from "@reclaimprotocol/js-sdk";
 import { z } from "zod";
 import { db } from "~/server/db";
 import {
@@ -6,6 +6,10 @@ import {
 	LinkedinConnectionsSchema,
 	nykaaOrders,
 	NykaaOrdersSchema,
+	uberPastTrips,
+	UberPastTripsSchema,
+	zomatoOrders,
+	ZomatoOrdersSchema,
 } from "~/server/db/schema";
 
 export const dynamic = "force-static";
@@ -15,11 +19,13 @@ export async function GET() {
 }
 
 const NykaaResSchema = z.object({ orders: z.array(NykaaOrdersSchema) });
+const ZomatoResSchema = z.object({ orders: z.array(ZomatoOrdersSchema) });
 const LinkedInResSchema = z.object({
 	data: z.object({
 		connectionsList: z.array(LinkedinConnectionsSchema),
 	}),
 });
+const UberResSchema = z.object({ trips: z.array(UberPastTripsSchema) });
 
 export async function POST(req: Request) {
 	try {
@@ -66,6 +72,43 @@ export async function POST(req: Request) {
 			console.log({
 				connections: parsedLinkedInData.data.data.connectionsList,
 			});
+
+			return Response.json({ message: "Updated data in db successfully" });
+		}
+
+		// zomato order history
+		const parsedZomatoOrders = ZomatoResSchema.safeParse(proof.publicData);
+		if (parsedZomatoOrders.success) {
+			const insertedIds = await db
+				.insert(zomatoOrders)
+				.values(parsedZomatoOrders.data.orders)
+				.onConflictDoNothing()
+				.returning({
+					id: zomatoOrders.id,
+				});
+
+			console.dir({ insertedIds }, { depth: null });
+
+			console.log({ orders: parsedZomatoOrders });
+
+			return Response.json({ message: "Updated data in db successfully" });
+		}
+
+		// uber past trips
+		const parsedUberTrips = UberResSchema.safeParse(proof.publicData);
+
+		if (parsedUberTrips.success) {
+			const insertedIds = await db
+				.insert(uberPastTrips)
+				.values(parsedUberTrips.data.trips)
+				.onConflictDoNothing()
+				.returning({
+					id: uberPastTrips.id,
+				});
+
+			console.dir({ insertedIds }, { depth: null });
+
+			console.log({ trips: parsedUberTrips });
 
 			return Response.json({ message: "Updated data in db successfully" });
 		}

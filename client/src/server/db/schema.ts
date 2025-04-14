@@ -60,3 +60,41 @@ export const LinkedinConnectionsSchema = createInsertSchema(
 	updatedAt: true,
 	createdAt: true,
 });
+
+export const zomatoOrders = pgTable("zomatoOrders", (d) => ({
+	id: d.serial().primaryKey(),
+	updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+	createdAt: d
+		.timestamp({ withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull(),
+	dishString: d.text(),
+	orderId: d.integer(),
+	restaurantURL: d.text(),
+	totalCost: d.text(),
+}));
+
+export const ZomatoOrdersSchema = createInsertSchema(zomatoOrders).omit({
+	id: true,
+	updatedAt: true,
+	createdAt: true,
+});
+
+export const uberPastTrips = pgTable("uberPastTrips", (d) => ({
+	id: d.serial().primaryKey(),
+	updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+	createdAt: d
+		.timestamp({ withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`),
+	beginTripTime: d.text(),
+	dropoffTime: d.text(),
+	fare: d.text(),
+	pickupAddress: d.text(),
+	vehicleType: d.text(),
+}));
+
+export const UberPastTripsSchema = createInsertSchema(uberPastTrips).omit({
+	id: true,
+	updatedAt: true,
+	createdAt: true,
+});

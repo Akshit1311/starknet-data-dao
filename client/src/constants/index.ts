@@ -62,6 +62,11 @@ export const PROVIDERS_INFO = {
 	"zomato-orders": {
 		title: "Zomato Orders",
 		icon: NonBinary,
-		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+		categoryId: "61fea293-73bc-495c-9354-c2f61294fc30",
+	},
+	"uber-past-trips": {
+		title: "Uber Past Trips",
+		icon: NonBinary,
+		categoryId: "3ec71eb9-fd68-48b1-8e1e-c0ff54acbb9d",
 	},
 } as const;

@@ -36,6 +36,10 @@ export const reclaimRouter = createTRPCRouter({
 				env.RECLAIM_APP_ID,
 				env.RECLAIM_APP_SECRET,
 				categoryId,
+				// {
+				// 	device: "ios", // "android", // according to user agent
+				// 	useAppClip: true, // false for desktops
+				// },
 			);
 
 			reclaimProofRequest.setAppCallbackUrl(

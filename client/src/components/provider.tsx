@@ -135,7 +135,7 @@ const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
 		if (requestUrl) {
 			return (
 				<div className="flex flex-col items-center">
-					<div className="border-2 border-black p-2 bg-white  rounded-lg my-5">
+					<div className="border-4 border-black p-2 bg-white  rounded-lg my-5">
 						<QRCode value={requestUrl} />
 					</div>
 					<p>
