@@ -2,6 +2,7 @@ pub mod data_dao {
     pub mod data_dao;
     pub mod interface;
     pub mod test;
+    pub mod IReclaim;
 }
 
 pub mod utils {

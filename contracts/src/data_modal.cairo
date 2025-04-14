@@ -7,7 +7,8 @@ pub struct Settings {
 }
 
 #[derive(Drop, Serde)]
-pub struct UserData {
-    users: Array<ContractAddress>,
-    user_orders: Array<u256>
+pub struct UserPoints {
+    pub user: Array<ContractAddress>,
+    pub points: Array<u256> 
 }
+
