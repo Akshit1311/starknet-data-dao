@@ -1,9 +1,12 @@
 "use client";
 
-import { ReclaimProofRequest } from "@reclaimprotocol/js-sdk";
-import React from "react";
+import { ReclaimProofRequest, type Proof } from "@reclaimprotocol/js-sdk";
+import { Loader } from "lucide-react";
+import type React from "react";
+import { useState } from "react";
 import QRCode from "react-qr-code";
 
+import { logger } from "~/lib/utils";
 import { api } from "~/trpc/react";
 import type { TProofs, TProviders, TPublicData } from "~/types";
 
@@ -14,104 +17,144 @@ interface ProviderProps {
 }
 
 const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
-	// State to store the verification request URL
-	const [requestUrl, setRequestUrl] = React.useState("");
-	const [publicData, setPublicData] = React.useState<TPublicData | undefined>(
+	const [requestUrl, setRequestUrl] = useState<string>("");
+	const [publicData, setPublicData] = useState<TPublicData | undefined>(
 		undefined,
 	);
-	const [proofs, setProofs] = React.useState<TProofs>([]);
+	const [proofs, setProofs] = useState<TProofs>(undefined);
+	const [status, setStatus] = useState<
+		"idle" | "loading" | "success" | "error"
+	>("idle");
 
 	const { mutateAsync } = api.reclaim.generateConfig.useMutation();
 
+	const handleProofSuccess = (receivedProofs: TProofs) => {
+		logger.info("RECEIVED PROOFS:", { receivedProofs });
+
+		if (!receivedProofs) {
+			setProofs(undefined);
+			return;
+		}
+
+		setProofs(receivedProofs);
+
+		// Handle single Proof object case
+		if (!Array.isArray(receivedProofs) && typeof receivedProofs !== "string") {
+			const singleProof = receivedProofs as Proof;
+			if (singleProof.publicData) {
+				setPublicData(singleProof.publicData);
+			}
+			logger.info("Verification success", singleProof?.claimData?.context);
+		}
+		// Handle Proof[] array case
+		else if (
+			Array.isArray(receivedProofs) &&
+			receivedProofs.length > 0 &&
+			typeof receivedProofs[0] !== "string"
+		) {
+			const proofArray = receivedProofs as Proof[];
+			logger.info(
+				"Verification success",
+				JSON.stringify(proofArray.map((p) => p.claimData?.context)),
+			);
+		}
+		// Handle string or string[] case
+		else {
+			logger.info("SDK Message:", receivedProofs);
+		}
+
+		setStatus("success");
+	};
+
 	const getVerificationReq = async () => {
-		// Your credentials from the Reclaim Developer Portal
-		// Replace these with your actual credentials
+		try {
+			// Reset state
+			setStatus("loading");
+			setProofs(undefined);
+			setRequestUrl("");
 
-		// Initialize the Reclaim SDK with your credentials
-		const { reclaimProofRequestConfig } = await mutateAsync({
-			providerSlug,
-		});
+			// Initialize the Reclaim SDK
+			const { reclaimProofRequestConfig } = await mutateAsync({ providerSlug });
+			const reclaimProofRequest = await ReclaimProofRequest.fromJsonString(
+				reclaimProofRequestConfig,
+			);
 
-		const reclaimProofRequest = await ReclaimProofRequest.fromJsonString(
-			reclaimProofRequestConfig,
-		);
+			// Generate verification request URL
+			const url = await reclaimProofRequest.getRequestUrl();
+			logger.info("Request URL:", url);
+			setRequestUrl(url);
+			setStatus("idle"); // Reset status after URL is generated
 
-		// Generate the verification request URL
-		const requestUrl = await reclaimProofRequest.getRequestUrl();
+			// Start listening for proof submissions
+			await reclaimProofRequest.startSession({
+				onSuccess: (receivedProofs) =>
+					handleProofSuccess(receivedProofs as TProofs),
+				onError: (error: Error) => {
+					logger.error("Verification failed", error);
+					setStatus("error");
+				},
+			});
+		} catch (err) {
+			logger.error("Failed to generate verification request:", err);
+			setStatus("error");
+		}
+	};
 
-		console.log("Request URL:", requestUrl);
+	const hasProofs = (): boolean => {
+		if (!proofs) return false;
+		if (Array.isArray(proofs)) return proofs.length > 0;
+		return true;
+	};
 
-		setRequestUrl(requestUrl);
+	const renderContent = () => {
+		if (status === "loading") {
+			return (
+				<div className="mt-4 flex items-center gap-3">
+					Generating QR code...
+					<Loader className="animate-spin size-4" />
+				</div>
+			);
+		}
 
-		// Start listening for proof submissions
-		await reclaimProofRequest.startSession({
-			// Called when the user successfully completes the verification
-			onSuccess: (proofs) => {
-				console.log({ proofs });
+		if (status === "error") {
+			return (
+				<div className="break-words mx-auto text-red-500">
+					Verification failed. Please try again.
+				</div>
+			);
+		}
 
-				if (proofs) {
-					if (typeof proofs === "string") {
-						// When using a custom callback url, the proof is returned to the callback url and we get a message instead of a proof
-						console.log("SDK Message:", proofs);
-						setProofs([proofs]);
-					} else if (typeof proofs !== "string") {
-						// When using the default callback url, we get a proof object in the response
-						if (Array.isArray(proofs)) {
-							// when using provider with multiple proofs, we get an array of proofs
-							console.log(
-								"Verification success",
-								JSON.stringify(proofs.map((p) => p.claimData.context)),
-							);
-							setProofs(proofs);
-						} else {
-							// when using provider with a single proof, we get a single proof object
-							console.log("Verification success", proofs?.claimData.context);
-							console.log({ proofs });
+		if (status === "success" || hasProofs()) {
+			return (
+				<div className="break-words mx-auto text-green-500 mt-5">
+					Verification success!
+				</div>
+			);
+		}
 
-							setProofs(proofs);
+		if (requestUrl) {
+			return (
+				<div className="flex flex-col items-center">
+					<div className="border-2 border-black rounded-md p-1 my-5">
+						<QRCode value={requestUrl} />
+					</div>
+					<p>
+						Scan the QR code with the Reclaim verifier app to login into your
+						provider.
+					</p>
+				</div>
+			);
+		}
 
-							setPublicData(proofs.publicData);
-						}
-					}
-				}
-
-				// Add your success logic here, such as:
-				// - Updating UI to show verification success
-				// - Storing verification status
-				// - Redirecting to another page
-			},
-			// Called if there's an error during verification
-			onError: (error) => {
-				console.error("Verification failed", error);
-
-				// Add your error handling logic here, such as:
-				// - Showing error message to user
-				// - Resetting verification state
-				// - Offering retry options
-			},
-		});
+		return null;
 	};
 
 	return (
 		<>
-			<Button onClick={getVerificationReq}>Get Verification Request</Button>
-
-			{/* Display QR code when URL is available */}
-
-			{requestUrl && (
-				<div style={{ margin: "20px 0" }}>
-					<QRCode value={requestUrl} />
-				</div>
-			)}
-
-			{proofs && (
-				<div>
-					{/* <h2>Verification Successful!</h2> */}
-					<div className="w-1/2 break-words mx-auto">
-						{JSON.stringify(proofs, null, 2)}
-					</div>
-				</div>
-			)}
+			<Button onClick={getVerificationReq} disabled={status === "loading"}>
+				Get Verification Request
+			</Button>
+			{renderContent()}
 		</>
 	);
 };

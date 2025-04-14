@@ -7,20 +7,21 @@ import React, { useEffect, useRef } from "react";
 import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 
 import { cn } from "~/lib/utils";
+import { Button } from "./ui/button";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "700"] });
 
 const SVGDataURI =
 	"data:image/svg+xml;base64,IDxzdmcKICAgICAgd2lkdGg9IjQyMSIKICAgICAgaGVpZ2h0PSI4NTIiCiAgICAgIHZpZXdCb3g9IjAgMCA0MjEgODUyIgogICAgICBmaWxsPSJub25lIgogICAgICB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiAgICA+CiAgICAgIDxwYXRoCiAgICAgICAgZmlsbC1ydWxlPSJldmVub2RkIgogICAgICAgIGNsaXAtcnVsZT0iZXZlbm9kZCIKICAgICAgICBkPSJNNzMgMEgzNDhDMzg2LjY2IDAgNDE4IDMxLjM0MDEgNDE4IDcwVjc4MkM0MTggODIwLjY2IDM4Ni42NiA4NTIgMzQ4IDg1Mkg3M0MzNC4zNDAxIDg1MiAzIDgyMC42NiAzIDc4MlY3MEMzIDMxLjM0MDEgMzQuMzQwMSAwIDczIDBaTTM0OCA2SDczQzM3LjY1MzggNiA5IDM0LjY1MzggOSA3MFY3ODJDOSA4MTcuMzQ2IDM3LjY1MzggODQ2IDczIDg0NkgzNDhDMzgzLjM0NiA4NDYgNDEyIDgxNy4zNDYgNDEyIDc4MlY3MEM0MTIgMzQuNjUzOCAzODMuMzQ2IDYgMzQ4IDZaIgogICAgICAgIGZpbGw9ImJsYWNrIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgIHg9IjMxOCIKICAgICAgICB3aWR0aD0iMTAiCiAgICAgICAgaGVpZ2h0PSI2IgogICAgICAgIGZpbGw9ImJsYWNrIgogICAgICAgIGZpbGwtb3BhY2l0eT0iMC4yIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgIHg9IjkzIgogICAgICAgIHk9Ijg0NiIKICAgICAgICB3aWR0aD0iMTAiCiAgICAgICAgaGVpZ2h0PSI2IgogICAgICAgIGZpbGw9ImJsYWNrIgogICAgICAgIGZpbGwtb3BhY2l0eT0iMC4yIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgIHg9IjMiCiAgICAgICAgeT0iOTAiCiAgICAgICAgd2lkdGg9IjYiCiAgICAgICAgaGVpZ2h0PSIxMCIKICAgICAgICBmaWxsPSJibGFjayIKICAgICAgICBmaWxsLW9wYWNpdHk9IjAuMiIKICAgICAgLz4KICAgICAgPHJlY3QKICAgICAgICB4PSI0MTIiCiAgICAgICAgeT0iOTAiCiAgICAgICAgd2lkdGg9IjYiCiAgICAgICAgaGVpZ2h0PSIxMCIKICAgICAgICBmaWxsPSJibGFjayIKICAgICAgICBmaWxsLW9wYWNpdHk9IjAuMiIKICAgICAgLz4KICAgICAgPHJlY3QKICAgICAgICB4PSIzIgogICAgICAgIHk9Ijc1MiIKICAgICAgICB3aWR0aD0iNiIKICAgICAgICBoZWlnaHQ9IjEwIgogICAgICAgIGZpbGw9ImJsYWNrIgogICAgICAgIGZpbGwtb3BhY2l0eT0iMC4yIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgIHg9IjQxMiIKICAgICAgICB5PSI3NTIiCiAgICAgICAgd2lkdGg9IjYiCiAgICAgICAgaGVpZ2h0PSIxMCIKICAgICAgICBmaWxsPSJibGFjayIKICAgICAgICBmaWxsLW9wYWNpdHk9IjAuMiIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICBmaWxsLXJ1bGU9ImV2ZW5vZGQiCiAgICAgICAgY2xpcC1ydWxlPSJldmVub2RkIgogICAgICAgIGQ9Ik00MTcuOTcxIDI2Nkg0MTguOTgxQzQyMC4wOTYgMjY2IDQyMSAyNjYuODk1IDQyMSAyNjhWMzY0QzQyMSAzNjUuMTA1IDQyMC4wOTYgMzY2IDQxOC45ODEgMzY2SDQxNy45NzFWMjY2WiIKICAgICAgICBmaWxsPSJibGFjayIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICBmaWxsLXJ1bGU9ImV2ZW5vZGQiCiAgICAgICAgY2xpcC1ydWxlPSJldmVub2RkIgogICAgICAgIGQ9Ik0wIDMwMkMwIDMwMC44OTUgMC45MDQwMiAzMDAgMi4wMTkxOCAzMDBIMy4wMjg3OFYzNjNIMi4wMTkxOEMwLjkwNDAyIDM2MyAwIDM2Mi4xMDUgMCAzNjFWMzAyWiIKICAgICAgICBmaWxsPSJibGFjayIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICBmaWxsLXJ1bGU9ImV2ZW5vZGQiCiAgICAgICAgY2xpcC1ydWxlPSJldmVub2RkIgogICAgICAgIGQ9Ik0wIDIyM0MwIDIyMS44OTUgMC45MDQwMiAyMjEgMi4wMTkxOCAyMjFIMy4wMjg3OFYyODRIMi4wMTkxOEMwLjkwNDAyIDI4NCAwIDI4My4xMDUgMCAyODJWMjIzWiIKICAgICAgICBmaWxsPSJibGFjayIKICAgICAgLz4KICAgICAgPHBhdGgKICAgICAgICBmaWxsLXJ1bGU9ImV2ZW5vZGQiCiAgICAgICAgY2xpcC1ydWxlPSJldmVub2RkIgogICAgICAgIGQ9Ik0wIDE2MkMwIDE2MC44OTUgMC45MDQwMiAxNjAgMi4wMTkxOCAxNjBIMy4wMjg3OFYxOTNIMi4wMTkxOEMwLjkwNDAyIDE5MyAwIDE5Mi4xMDUgMCAxOTFWMTYyWiIKICAgICAgICBmaWxsPSJibGFjayIKICAgICAgLz4KICAgICAgPHJlY3QKICAgICAgICB4PSIxNTAiCiAgICAgICAgeT0iMzAiCiAgICAgICAgd2lkdGg9IjEyMCIKICAgICAgICBoZWlnaHQ9IjM1IgogICAgICAgIHJ4PSIxNy41IgogICAgICAgIGZpbGw9ImJsYWNrIgogICAgICAvPgogICAgICA8cmVjdAogICAgICAgIHg9IjI0NCIKICAgICAgICB5PSI0MSIKICAgICAgICB3aWR0aD0iMTMiCiAgICAgICAgaGVpZ2h0PSIxMyIKICAgICAgICByeD0iNi41IgogICAgICAgIGZpbGw9ImJsYWNrIgogICAgICAgIGZpbGwtb3BhY2l0eT0iMC4xIgogICAgICAvPgogICAgPC9zdmc+";
 
-export function PlayfulHeroSection() {
+export function HeroSection() {
 	const ref = useRef(null);
 	const isInView = useInView(ref);
 
 	return (
-		<div ref={ref} className="mb-20 w-full bg-gray-50 dark:bg-neutral-800">
-			<div className="mx-auto grid max-h-[50rem] max-w-7xl grid-cols-1 items-start gap-10 overflow-hidden pt-10 sm:grid-cols-2 md:max-h-[40rem] md:pt-20 lg:grid-cols-3">
-				<div className="px-4 py-10 md:px-8 md:py-10 lg:col-span-2">
+		<div ref={ref} className="w-full bg-gray-50 dark:bg-neutral-800">
+			<div className="mx-auto grid max-h-[50rem] max-w-7xl grid-cols-1 items-start gap-10 overflow-hidden py-10 sm:grid-cols-2 md:max-h-[44rem] md:pt-28 lg:grid-cols-3">
+				<div className="px-4 py-10 md:px-12 md:py-10 lg:col-span-2">
 					<RoughNotationGroup show={isInView}>
 						<h2
 							className={cn(
@@ -33,30 +34,30 @@ export function PlayfulHeroSection() {
 								type="highlight"
 								animationDuration={2000}
 								iterations={3}
-								color="#facc1580"
+								color="#00C8EF"
 								multiline
 							>
 								<span className="text-currentColor">productivity tool</span>
 							</RoughNotation>{" "}
-							is now available for{" "}
-							<RoughNotation
+							for Data Dao{" "}
+							{/* <RoughNotation
 								type="underline"
 								animationDuration={2000}
 								iterations={10}
-								color="#facc15"
+								color="#00C8EF"
 							>
 								mobile
-							</RoughNotation>
+							</RoughNotation> */}
 						</h2>
 						<p className="mt-4 max-w-2xl text-center text-sm text-neutral-500 sm:text-left md:mt-10 md:text-lg dark:text-neutral-400">
-							Aceternity AI bring you the best productivity tools for your
-							desktop, now available on mobile. Download the app now to avail
-							additional{" "}
+							Lorem ipsum dolor sit amet consectetur adipisicing elit. Ullam
+							similique neque vitae eos laborum nihil amet provident natus
+							doloribus tempore expedita, laudantium soluta, eligendi officia.
 							<RoughNotation
 								type="underline"
 								animationDuration={2000}
 								iterations={3}
-								color="#facc15"
+								color="#00C8EF"
 							>
 								20% discount
 							</RoughNotation>{" "}
@@ -64,13 +65,12 @@ export function PlayfulHeroSection() {
 						</p>
 					</RoughNotationGroup>
 					<div className="mt-10 flex flex-col items-center gap-4 [perspective:800px] sm:flex-row">
+						<Button className="w-full origin-left rounded-lg bg-[#00C8EF] px-4 py-2 text-base font-bold text-black transition duration-200 hover:shadow-lg hover:[transform:rotateX(10deg)] sm:w-auto">
+							Get started
+						</Button>
 						{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-						<button className="w-full origin-left rounded-lg bg-yellow-400 px-4 py-2 text-base font-bold text-black transition duration-200 hover:shadow-lg hover:[transform:rotateX(10deg)] sm:w-auto">
-							Get the app
-						</button>
-						{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-						<button className="rounded-lg border border-transparent px-4 py-2 text-base text-black transition duration-200 hover:border-yellow-500 dark:text-white">
-							Read changelog
+						<button className="rounded-lg border border-transparent px-4 py-2 text-base text-black transition duration-200 hover:border-[#00C8EF] dark:text-white">
+							yooooooooooo
 						</button>
 					</div>
 				</div>
@@ -85,6 +85,7 @@ export function PlayfulHeroSection() {
 export const Skeleton = () => {
 	const ref = useRef(null);
 	const isInView = useInView(ref);
+
 	useEffect(() => {
 		const sequence = [
 			[".first", { opacity: [0, 1] }, { duration: 1, ease: "easeOut" }],
@@ -103,6 +104,7 @@ export const Skeleton = () => {
 		//@ts-ignore
 		if (isInView) animate(sequence);
 	}, [isInView]);
+
 	return (
 		<div ref={ref} className="realtive m-auto h-[600px] w-[360px] pt-20">
 			<div
@@ -123,28 +125,28 @@ export const Skeleton = () => {
 					nuts.
 				</div>
 				<div className="images grid grid-cols-2 gap-2">
-					<Image
+					<img
 						src="https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?q=80&w=2992&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						alt="island 1"
 						height="200"
 						width="200"
 						className="image h-full max-h-[100px] w-full rounded-lg object-cover opacity-0"
 					/>{" "}
-					<Image
+					<img
 						src="https://images.unsplash.com/photo-1509233725247-49e657c54213?q=80&w=3449&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						alt="island 1"
 						height="200"
 						width="200"
 						className="image h-full max-h-[100px] w-full rounded-lg object-cover opacity-0"
 					/>
-					<Image
+					<img
 						src="https://images.unsplash.com/photo-1473116763249-2faaef81ccda?q=80&w=3592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						alt="island 1"
 						height="200"
 						width="200"
 						className="image h-full max-h-[100px] w-full rounded-lg object-cover opacity-0"
 					/>{" "}
-					<Image
+					<img
 						src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=3070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
 						alt="island 1"
 						height="200"
