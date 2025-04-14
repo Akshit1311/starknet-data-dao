@@ -69,7 +69,7 @@ export const zomatoOrders = pgTable("zomatoOrders", (d) => ({
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull(),
 	dishString: d.text(),
-	orderId: d.integer(),
+	orderId: d.bigint({ mode: "bigint" }),
 	restaurantURL: d.text(),
 	totalCost: d.text(),
 }));
