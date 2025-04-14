@@ -156,7 +156,7 @@ const Navbar = () => {
 	}, [disconnectAsync]);
 
 	const navLinks = [
-		{ href: "/", text: "App" },
+		{ href: "/", text: "/" },
 		{ href: "/providers", text: "Providers" },
 	];
 
