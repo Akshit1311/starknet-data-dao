@@ -47,20 +47,19 @@ export function HeroSection() {
 							for DAOs{" "}
 						</h2>
 						<p className="mt-4 max-w-2xl text-center text-sm text-neutral-500 sm:text-left md:mt-10 md:text-lg dark:text-neutral-400">
-							Transform how your DAO manages data with Reclaim Protocol.
-							Securely verify, share, and monetize information—no
-							intermediaries, no exploitation.
-							<br />
+							Transform how your DAO manages data with{" "}
 							<RoughNotation
 								type="underline"
 								animationDuration={2000}
 								iterations={3}
 								color="#00C8EF"
 							>
-								20% early-bird
+								Reclaim Protocol.
 							</RoughNotation>{" "}
-							discount for founding members. Take your data governance to the
-							next level. and take your productivity to the next level.
+							Securely verify, share, and monetize information—no
+							intermediaries, no exploitation. <br />
+							Take your data governance to the next level. and take your
+							productivity to the next level.
 						</p>
 					</RoughNotationGroup>
 
