@@ -1,10 +1,16 @@
 import { TRPCError } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import {
+	linkedinConnections,
+	nykaaOrders,
+	uberPastTrips,
+	users,
+	zomatoOrders,
+} from "~/server/db/schema";
 import { createAndSetToken } from "~/server/utils";
 import { WalletSchema } from "~/types";
 
@@ -86,5 +92,58 @@ export const authRouter = createTRPCRouter({
 	users: publicProcedure.query(async () => {
 		const users = await db.query.users.findMany();
 		return users;
+	}),
+
+	leaderboard: publicProcedure.query(async ({ ctx }) => {
+		const db = ctx.db;
+		const allUsers = await db.select().from(users);
+
+		// Step 2: For each user, count items in each table
+		const leaderboardData = await Promise.all(
+			allUsers.map(async (user) => {
+				// Count Nykaa orders
+				const [nykaaResult] = await db
+					.select({ count: count() })
+					.from(nykaaOrders)
+					.where(eq(nykaaOrders.userId, user.id));
+
+				// Count LinkedIn connections
+				const [linkedinResult] = await db
+					.select({ count: count() })
+					.from(linkedinConnections)
+					.where(eq(linkedinConnections.userId, user.id));
+
+				// Count Zomato orders
+				const [zomatoResult] = await db
+					.select({ count: count() })
+					.from(zomatoOrders)
+					.where(eq(zomatoOrders.userId, user.id));
+
+				// Count Uber trips
+				const [uberResult] = await db
+					.select({ count: count() })
+					.from(uberPastTrips)
+					.where(eq(uberPastTrips.userId, user.id));
+
+				// Calculate total count
+				const totalCount =
+					(nykaaResult?.count ?? 0) +
+					(linkedinResult?.count ?? 0) +
+					(zomatoResult?.count ?? 0) +
+					(uberResult?.count ?? 0);
+
+				return {
+					userId: user.id,
+					userAddress: user.address,
+					nickname: user.nickname,
+					points: totalCount,
+				};
+			}),
+		);
+
+		// Sort users by points in descending order (highest first)
+		leaderboardData.sort((a, b) => b.points - a.points);
+
+		return leaderboardData;
 	}),
 });
