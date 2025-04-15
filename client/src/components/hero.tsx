@@ -65,7 +65,7 @@ export function HeroSection() {
 
 					<div className="mt-10 flex flex-col items-center justify-center lg:justify-start gap-4 [perspective:800px] sm:flex-row">
 						<Link href={"/providers"}>
-							<Button className="w-full cursor-pointer origin-left rounded-lg bg-[#00C8EF] px-4 py-2 text-base font-bold text-black transition duration-200 hover:shadow-lg hover:[transform:rotateX(10deg)] sm:w-auto">
+							<Button className="w-full cursor-pointer origin-left rounded-lg bg-main px-4 py-2 text-base font-bold text-black transition duration-200 hover:shadow-lg hover:[transform:rotateX(10deg)] sm:w-auto">
 								Get started
 							</Button>
 						</Link>
