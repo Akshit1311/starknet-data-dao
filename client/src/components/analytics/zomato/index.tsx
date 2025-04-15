@@ -1,13 +1,13 @@
-// analytics/index.tsx
 "use client";
 
 import { useAccount } from "@starknet-react/core";
 import type React from "react";
 
-import { api } from "~/trpc/react";
-
+import DownloadData from "~/components/download";
 import { buttonVariants } from "~/components/ui/button";
 import { cn, formatNumberWithCommas } from "~/lib/utils";
+import { api } from "~/trpc/react";
+
 import type { AnalyticsProps } from "..";
 import Chart from "./chart";
 
@@ -88,7 +88,6 @@ const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 			.reverse();
 	};
 
-	// Generate chart data
 	const orderChartData = getMonthlyChartData();
 
 	if (!address) {
@@ -96,28 +95,32 @@ const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	}
 
 	return (
-		<div
-			className={cn(
-				"!h-full !bg-white flex flex-col items-center backdrop-blur-3xl shadow-sm !py-4 !px-6",
-				buttonVariants({ variant: "noShadow" }),
-			)}
-		>
-			<div className="flex justify-between w-full items-start">
-				<p className="text-black/60">
-					Total cost:{" "}
-					<span className="text-black font-semibold">
-						₹{formatNumberWithCommas(totalCost?.toFixed(2))}
-					</span>
-				</p>
-				<p className="text-black/60">
-					Total orders:{" "}
-					<span className="text-black font-semibold">{totalOrders}</span>
-				</p>
+		<div className="w-full flex items-center justify-center flex-col">
+			<div
+				className={cn(
+					"!h-full !bg-white flex flex-col items-center backdrop-blur-3xl shadow-sm !py-4 !px-6",
+					buttonVariants({ variant: "noShadow" }),
+				)}
+			>
+				<div className="flex justify-between w-full items-start">
+					<p className="text-black/60">
+						Total cost:{" "}
+						<span className="text-black font-semibold">
+							₹{formatNumberWithCommas(totalCost?.toFixed(2))}
+						</span>
+					</p>
+					<p className="text-black/60">
+						Total orders:{" "}
+						<span className="text-black font-semibold">{totalOrders}</span>
+					</p>
+				</div>
+
+				<div className="mt-6 h-full w-full -ml-4">
+					<Chart chartData={orderChartData} />
+				</div>
 			</div>
 
-			<div className="mt-6 h-full w-full -ml-4">
-				<Chart chartData={orderChartData} />
-			</div>
+			<DownloadData data={data?.providerResult} />
 		</div>
 	);
 };

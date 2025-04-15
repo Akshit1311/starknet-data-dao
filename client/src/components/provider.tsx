@@ -157,7 +157,7 @@ const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
 	return (
 		<>
 			<Button onClick={getVerificationReq} disabled={status === "loading"}>
-				Get Verification Request
+				Get scanner for your data.
 			</Button>
 			{renderContent()}
 		</>
