@@ -25,7 +25,7 @@ const chartConfig = {
 
 const Chart: React.FC<ChartProps> = ({ chartData }) => {
 	return (
-		<div className="w-[600px] -ml-4">
+		<div className="w-[600px] -ml-2">
 			<ChartContainer config={chartConfig}>
 				<AreaChart accessibilityLayer data={chartData}>
 					{/* <CartesianGrid vertical={false} /> */}

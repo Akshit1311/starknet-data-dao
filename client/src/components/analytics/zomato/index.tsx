@@ -7,7 +7,7 @@ import type React from "react";
 import { api } from "~/trpc/react";
 
 import { buttonVariants } from "~/components/ui/button";
-import { cn } from "~/lib/utils";
+import { cn, formatNumberWithCommas } from "~/lib/utils";
 import type { AnalyticsProps } from "..";
 import Chart from "./chart";
 
@@ -32,16 +32,19 @@ const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	);
 
 	// Calculate total cost from all orders
-	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-	const totalCost = data?.providerResult.reduce((acc: any, order: any) => {
-		if (order.totalCost) {
-			const cost = order.totalCost.replace(/[^0-9.-]+/g, "");
-			const parsedCost = Number(cost);
+	const totalCost: number = data?.providerResult.reduce(
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		(acc: number, order: any) => {
+			if (order.totalCost) {
+				const cost = order.totalCost.replace(/[^0-9.-]+/g, "");
+				const parsedCost = Number(cost);
 
-			return acc + parsedCost;
-		}
-		return acc;
-	}, 0);
+				return acc + parsedCost;
+			}
+			return acc;
+		},
+		0,
+	);
 
 	const totalOrders = data?.providerResult.length;
 
@@ -95,14 +98,16 @@ const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	return (
 		<div
 			className={cn(
-				"!h-full !bg-white flex flex-col items-center backdrop-blur-3xl shadow-sm !py-4 !px-4",
+				"!h-full !bg-white flex flex-col items-center backdrop-blur-3xl shadow-sm !py-4 !px-6",
 				buttonVariants({ variant: "noShadow" }),
 			)}
 		>
 			<div className="flex justify-between w-full items-start">
 				<p className="text-black/60">
 					Total cost:{" "}
-					<span className="text-black font-semibold">₹{totalCost}</span>
+					<span className="text-black font-semibold">
+						₹{formatNumberWithCommas(totalCost?.toFixed(2))}
+					</span>
 				</p>
 				<p className="text-black/60">
 					Total orders:{" "}
