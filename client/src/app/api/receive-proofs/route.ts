@@ -63,7 +63,7 @@ export async function POST(req: Request) {
 		}
 
 		const parsedContextMsg = ContextMsgSchema.safeParse(
-			parsedContext.data.contextMessage,
+			JSON.parse(parsedContext.data.contextMessage),
 		);
 
 		if (!parsedContextMsg.success) {
