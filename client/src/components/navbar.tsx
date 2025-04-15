@@ -165,12 +165,12 @@ const Navbar = () => {
 			href: "/providers",
 			text: "Providers",
 
-			isActive: pathname === "/providers",
+			isActive: pathname.includes("/provider"),
 		},
 		{
 			href: "/leaderboard",
 			text: "Leaderboard",
-			isActive: pathname === "/leaderboard",
+			isActive: pathname.includes("/leaderboard"),
 		},
 	];
 
