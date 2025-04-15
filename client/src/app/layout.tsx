@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Geist, JetBrains_Mono } from "next/font/google";
 
 import Navbar from "~/components/navbar";
 import { Toaster } from "~/components/ui/sonner";
 import Providers from "~/providers";
+import { auth } from "~/server/utils";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/styles/globals.css";
-import { auth } from "~/server/utils";
 
 export const metadata: Metadata = {
 	title: "Create T3 App",
@@ -20,6 +20,11 @@ const geist = Geist({
 	variable: "--font-geist-sans",
 });
 
+const jetbrainsMono = JetBrains_Mono({
+	subsets: ["latin"],
+	// variable: "--font-jetbrains",
+});
+
 export default async function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -28,8 +33,8 @@ export default async function RootLayout({
 	console.log({ authData });
 
 	return (
-		<html lang="en" className={`${geist.variable}`}>
-			<body className="font-jetbrainsMono">
+		<html lang="en" className={`${jetbrainsMono.className}`}>
+			<body className="">
 				<TRPCReactProvider>
 					<Providers>
 						<Navbar nickname={authData?.nickname} />
