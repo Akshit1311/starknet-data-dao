@@ -9,14 +9,14 @@ import type { LeaderboardData } from "./_components/columns";
 import LeaderboardTable from "./_components/table";
 
 const LeaderboardPage: NextPage = async () => {
-	const users = await api.auth.users();
+	const users = await api.auth.leaderboard();
 
-	const formattedData: LeaderboardData[] = users.map((user, idx) => ({
-		id: user.id.toString(),
-		rank: idx + 1,
-		name: user.nickname || `Anonymous${idx + 1}`,
-		address: shortAddress(user.address),
-		points: "1000",
+	const data = users.map((u, i) => ({
+		id: u.userId,
+		rank: i + 1,
+		name: u.nickname,
+		address: u.userAddress,
+		points: u.points,
 	}));
 
 	return (
@@ -34,7 +34,7 @@ const LeaderboardPage: NextPage = async () => {
 						</RoughNotation>
 					</h1>
 				</RoughNotationGroup>
-				<LeaderboardTable data={formattedData} />
+				<LeaderboardTable data={data} />
 			</div>
 		</main>
 	);
