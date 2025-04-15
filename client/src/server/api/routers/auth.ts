@@ -2,6 +2,7 @@ import { TRPCError } from "@trpc/server";
 import { count, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import type { TProviderInfoKeys } from "~/constants";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import {
@@ -146,4 +147,67 @@ export const authRouter = createTRPCRouter({
 
 		return leaderboardData;
 	}),
+
+	providerInfo: publicProcedure
+		.input(
+			z.object({
+				address: WalletSchema,
+				analyticSlug: z.custom<TProviderInfoKeys>(),
+			}),
+		)
+		.query(async ({ input, ctx }) => {
+			const { analyticSlug, address } = input;
+
+			const user = await db.query.users.findFirst({
+				where: eq(users.address, address),
+			});
+
+			if (!user) {
+				throw new TRPCError({
+					code: "UNAUTHORIZED",
+					message: "User not found",
+				});
+			}
+
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			let providerResult: any;
+
+			switch (analyticSlug) {
+				case "nykaa-orders":
+					providerResult = await ctx.db
+						.select()
+						.from(nykaaOrders)
+						.where(eq(nykaaOrders.userId, user.id));
+					break;
+				case "linkedin-connections":
+					providerResult = await ctx.db
+						.select()
+						.from(linkedinConnections)
+						.where(eq(linkedinConnections.userId, user.id));
+					break;
+				case "zomato-orders":
+					providerResult = await ctx.db
+						.select()
+						.from(zomatoOrders)
+						.where(eq(zomatoOrders.userId, user.id));
+					break;
+				case "uber-past-trips":
+					providerResult = await ctx.db
+						.select()
+						.from(uberPastTrips)
+						.where(eq(uberPastTrips.userId, user.id));
+					break;
+				default:
+					throw new TRPCError({
+						code: "BAD_REQUEST",
+						message: "Invalid provider slug",
+					});
+			}
+
+			return {
+				address,
+				analyticSlug,
+				providerResult: providerResult,
+			};
+		}),
 });

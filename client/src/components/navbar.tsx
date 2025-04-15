@@ -30,8 +30,8 @@ import { cn, copyAddressToClipboard, shortAddress } from "~/lib/utils";
 import { useUserStore } from "~/store/useUserStore";
 
 import { usePathname } from "next/navigation";
-import { Button, buttonVariants } from "./ui/button";
 import NickInput from "./NickInput";
+import { Button, buttonVariants } from "./ui/button";
 
 export const getConnectors = (isMobile: boolean) => {
 	const mobileConnector = ArgentMobileConnector.init({
@@ -174,6 +174,11 @@ const Navbar = ({ nickname }: { nickname?: string | null }) => {
 			href: "/leaderboard",
 			text: "Leaderboard",
 			isActive: pathname.includes("/leaderboard"),
+		},
+		{
+			href: "/analytics",
+			text: "Analytics",
+			isActive: pathname.includes("/analytics"),
 		},
 	];
 

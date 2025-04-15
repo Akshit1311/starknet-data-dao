@@ -69,3 +69,15 @@ export const PROVIDERS_INFO = {
 			"Profit from your travel data. Share your ride history, frequent destinations, and travel patterns while keeping personal details secure.",
 	},
 } as const;
+
+export type TProvider = keyof typeof PROVIDERS_INFO;
+export type TProviderInfo = {
+	[K in TProvider]: {
+		title: string;
+		icon: string;
+		categoryId: string;
+		description: string;
+	};
+};
+export type TProviderInfoKeys = keyof TProviderInfo;
+export type TProviderInfoValues = TProviderInfo[TProviderInfoKeys];

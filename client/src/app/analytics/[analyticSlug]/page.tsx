@@ -1,19 +1,19 @@
 import Image from "next/image";
 import React from "react";
+import Analytics from "~/components/analytics";
 
-import Provider from "~/components/provider";
-import { PROVIDERS_INFO } from "~/constants";
+import { PROVIDERS_INFO, type TProviderInfoKeys } from "~/constants";
 import { cn } from "~/lib/utils";
 import { ProviderSchema } from "~/types";
 
 const ProviderPage = async ({
 	params,
 }: {
-	params: Promise<{ providerSlug: string }>;
+	params: Promise<{ analyticSlug: TProviderInfoKeys }>;
 }) => {
-	const { providerSlug } = await params;
+	const { analyticSlug } = await params;
 
-	const parsedData = ProviderSchema.safeParse(providerSlug);
+	const parsedData = ProviderSchema.safeParse(analyticSlug);
 
 	if (!parsedData.success) return <div>Provider not found</div>;
 
@@ -38,14 +38,13 @@ const ProviderPage = async ({
 						"mt-6": provider.title.toLowerCase().includes("nykka"),
 					})}
 				>
-					{provider.title}
+					{provider.title} Analytics
 				</h4>
-				<p className="text-sm mt-2 text-muted-foreground max-w-[300px]">
-					{provider.description}
-				</p>
 			</div>
 
-			<Provider providerSlug={parsedData.data} />
+			<Analytics analyticSlug={analyticSlug} />
+
+			{/* <Provider analyticSlug={parsedData.data} /> */}
 		</main>
 	);
 };

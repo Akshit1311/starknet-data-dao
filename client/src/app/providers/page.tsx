@@ -17,7 +17,7 @@ const ProvidersPage: NextPage = () => {
 					>
 						{Object.entries(PROVIDERS_INFO).map(([key, provider]) => (
 							<Link
-								href={`/provider/${key}`}
+								href={`/providers/${key}`}
 								className="border-border shadow-shadow text-main-foreground rounded-base bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY border-2 p-5 transition-all hover:shadow-none"
 								key={key}
 							>
