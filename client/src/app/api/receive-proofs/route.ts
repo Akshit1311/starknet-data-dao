@@ -50,6 +50,12 @@ export async function POST(req: Request) {
 
 		const userId = Number.parseInt(parsedContext.data.contextMessage);
 
+		console.log({
+			userId,
+			ctxMsg: parsedContext.data.contextMessage,
+			parsedContext,
+		});
+
 		// nykaa
 		const parsedData = NykaaResSchema.safeParse(proof.publicData);
 
