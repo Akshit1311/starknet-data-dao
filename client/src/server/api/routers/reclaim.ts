@@ -46,16 +46,10 @@ export const reclaimRouter = createTRPCRouter({
 				// },
 			);
 
-			console.log("addContext");
-
-			console.log({
-				address: ctx.user.address,
-				userId: ctx.user.userId.toString(),
-			});
-
-			const ctxMsg = { userId: ctx.user.userId, slug: providerSlug };
-
-			reclaimProofRequest.addContext(ctx.user.address, ctxMsg.toString());
+			reclaimProofRequest.addContext(
+				ctx.user.address,
+				ctx.user.userId.toString(),
+			);
 
 			reclaimProofRequest.setAppCallbackUrl(
 				"https://bankai-data-dao.vercel.app/api/receive-proofs",
