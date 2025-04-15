@@ -27,7 +27,9 @@ const ProvidersPage: NextPage = () => {
 									width={52}
 									height={52}
 									className={cn("rounded-md", {
-										"size-10": provider.title.toLowerCase().includes("nykka"),
+										"size-9":
+											provider.title.toLowerCase().includes("nykka") ||
+											provider.title.toLowerCase().includes("uber"),
 									})}
 								/>
 								<h4
@@ -37,11 +39,8 @@ const ProvidersPage: NextPage = () => {
 								>
 									{provider.title}
 								</h4>
-								<p className="text-base mt-2 text-muted-foreground max-w-[300px]">
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-									Voluptates, consequatur architecto laborum possimus cum nam
-									amet voluptatum odio ut necessitatibus perferendis qui ipsum
-									non sapiente?
+								<p className="text-sm mt-2 text-muted-foreground max-w-[300px]">
+									{provider.description}
 								</p>
 							</Link>
 						))}

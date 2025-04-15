@@ -44,20 +44,28 @@ export const PROVIDERS_INFO = {
 		title: "LinkedIn Connections",
 		icon: "/icons/linkedin.svg",
 		categoryId: "3551e533-f12a-4580-828a-3bfabd964e20",
+		description:
+			"Connect your professional network data to earn rewards. Share your connection history, engagement metrics, and professional interactions while maintaining privacy.",
 	},
 	"nykaa-orders": {
 		title: "Nykka Orders",
 		icon: "/icons/nykka.svg",
 		categoryId: "43a0b71f-bd25-4f10-bbad-9541961df72e",
+		description:
+			"Monetize your beauty and personal care shopping patterns. Share your purchase history, product preferences, and shopping behavior from India's leading beauty retailer.",
 	},
 	"zomato-orders": {
 		title: "Zomato Orders",
 		icon: "/icons/zomato.svg",
 		categoryId: "61fea293-73bc-495c-9354-c2f61294fc30",
+		description:
+			"Turn your food ordering habits into income. Share your restaurant preferences, ordering frequency, and culinary tastes from your Zomato history.",
 	},
 	"uber-past-trips": {
 		title: "Uber Past Trips",
 		icon: "/icons/uber.png",
 		categoryId: "3ec71eb9-fd68-48b1-8e1e-c0ff54acbb9d",
+		description:
+			"Profit from your travel data. Share your ride history, frequent destinations, and travel patterns while keeping personal details secure.",
 	},
 } as const;
