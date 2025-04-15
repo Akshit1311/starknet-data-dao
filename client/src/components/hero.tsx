@@ -8,6 +8,7 @@ import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
 
 import { cn } from "~/lib/utils";
 
+import { Icons } from "./Icons";
 import { Button } from "./ui/button";
 
 const manrope = Manrope({ subsets: ["latin"], weight: ["400", "700"] });
@@ -72,8 +73,13 @@ export function HeroSection() {
 					</div>
 				</div>
 
-				<div className="relative flex h-full flex-shrink-0 justify-end overflow-hidden">
+				<div className="relative flex h-full flex-shrink-0 justify-end">
 					<Skeleton />
+
+					<div className="absolute -bottom-[0rem] left-[-7.5rem] flex gap-2 text-lg font-semibold">
+						<span className="mt-11">Demo</span>
+						<Icons.arrow className="order-1 arrow size-20 text-brand-400 transition-transform duration-300 z-50 rotate-[221deg] text-main" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -84,7 +90,7 @@ export const Skeleton = () => {
 	const ref = useRef(null);
 	const isInView = useInView(ref);
 
-	useEffect(() => {
+	React.useEffect(() => {
 		const sequence = [
 			[".first", { opacity: [0, 1] }, { duration: 1, ease: "easeOut" }],
 			[".second", { opacity: [0, 1] }, { duration: 1, ease: "easeOut" }],
