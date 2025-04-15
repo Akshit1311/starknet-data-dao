@@ -158,6 +158,7 @@ const Navbar = () => {
 	const navLinks = [
 		{ href: "/", text: "Home" },
 		{ href: "/providers", text: "Providers" },
+		{ href: "/leaderboard", text: "Leaderboard" },
 	];
 
 	return (
