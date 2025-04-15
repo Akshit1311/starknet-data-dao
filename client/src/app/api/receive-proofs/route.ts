@@ -134,7 +134,7 @@ export async function POST(req: Request) {
 
 		return Response.json({ message: "zod failed!" }, { status: 400 });
 	} catch (error) {
-		console.log({ message: "errored!" });
+		console.log({ message: "errored!", error });
 
 		return Response.json({ message: "errored!" }, { status: 500 });
 	}
