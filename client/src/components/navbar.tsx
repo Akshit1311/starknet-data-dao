@@ -29,6 +29,7 @@ import { useIsMobile } from "~/hooks/useIsMobile";
 import { cn, copyAddressToClipboard, shortAddress } from "~/lib/utils";
 import { useUserStore } from "~/store/useUserStore";
 
+import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "./ui/button";
 
 export const getConnectors = (isMobile: boolean) => {
@@ -73,8 +74,11 @@ const Navbar = () => {
 	const { address, connector, chainId } = useAccount();
 	const { connect: connectSnReact } = useConnect();
 	const { disconnectAsync } = useDisconnect();
+
 	const { setAddress, setProvider, setLastWallet } = useUserStore();
 	const isMobile = useIsMobile();
+
+	const pathname = usePathname();
 
 	const requiredChainId = React.useMemo(
 		() =>
@@ -155,10 +159,19 @@ const Navbar = () => {
 		disconnectAsync();
 	}, [disconnectAsync]);
 
-	const navLinks = [
-		{ href: "/", text: "Home" },
-		{ href: "/providers", text: "Providers" },
-		{ href: "/leaderboard", text: "Leaderboard" },
+	const NAV_LINKS = [
+		{ href: "/", text: "Home", isActive: pathname === "/" },
+		{
+			href: "/providers",
+			text: "Providers",
+
+			isActive: pathname.includes("/provider"),
+		},
+		{
+			href: "/leaderboard",
+			text: "Leaderboard",
+			isActive: pathname.includes("/leaderboard"),
+		},
 	];
 
 	return (
@@ -174,8 +187,12 @@ const Navbar = () => {
 					</Link>
 
 					<div className="flex items-center font-base text-base gap-10">
-						{navLinks.map((link) => (
-							<Link key={link.href} href={link.href}>
+						{NAV_LINKS.map((link) => (
+							<Link
+								key={link.href}
+								href={link.href}
+								className={cn(link.isActive && "text-main")}
+							>
 								{link.text}
 							</Link>
 						))}
