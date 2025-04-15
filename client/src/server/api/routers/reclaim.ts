@@ -53,10 +53,9 @@ export const reclaimRouter = createTRPCRouter({
 				userId: ctx.user.userId.toString(),
 			});
 
-			reclaimProofRequest.addContext(
-				ctx.user.address,
-				ctx.user.userId.toString(),
-			);
+			const ctxMsg = { userId: ctx.user.userId, slug: providerSlug };
+
+			reclaimProofRequest.addContext(ctx.user.address, ctxMsg.toString());
 
 			reclaimProofRequest.setAppCallbackUrl(
 				"https://bankai-data-dao.vercel.app/api/receive-proofs",

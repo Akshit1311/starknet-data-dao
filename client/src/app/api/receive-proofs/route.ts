@@ -11,7 +11,6 @@ import {
 	zomatoOrders,
 	ZomatoOrdersSchema,
 } from "~/server/db/schema";
-import { WalletSchema } from "~/types";
 
 export const dynamic = "force-static";
 
@@ -33,6 +32,11 @@ const ContextSchema = z.object({
 	contextMessage: z.string(),
 });
 
+const ContextMsgSchema = z.object({
+	userId: z.number(),
+	slug: z.string(),
+});
+
 export async function POST(req: Request) {
 	try {
 		const data = await req.text();
@@ -48,7 +52,18 @@ export async function POST(req: Request) {
 			return Response.json({ message: "context errored!" }, { status: 500 });
 		}
 
-		const userId = Number.parseInt(parsedContext.data.contextMessage);
+		const parsedContextMsg = ContextMsgSchema.safeParse(
+			parsedContext.data.contextMessage,
+		);
+
+		if (!parsedContextMsg.success) {
+			return Response.json(
+				{ message: "context msg errored!" },
+				{ status: 500 },
+			);
+		}
+
+		const userId = parsedContextMsg.data.userId;
 
 		console.log({
 			userId,
@@ -59,7 +74,7 @@ export async function POST(req: Request) {
 		// nykaa
 		const parsedData = NykaaResSchema.safeParse(proof.publicData);
 
-		if (parsedData.success) {
+		if (parsedData.success && parsedContextMsg.data.slug === "nykaa-orders") {
 			const insertedIds = await db
 				.insert(nykaaOrders)
 				.values(parsedData.data.orders.map((o) => ({ ...o, userId })))
@@ -80,7 +95,10 @@ export async function POST(req: Request) {
 
 		console.dir({ parsedLinkedInData }, { depth: null });
 
-		if (parsedLinkedInData.success) {
+		if (
+			parsedLinkedInData.success &&
+			parsedContextMsg.data.slug === "linkedin-connections"
+		) {
 			const insertedIds = await db
 				.insert(linkedinConnections)
 				.values(
