@@ -5,7 +5,7 @@ import type { ColumnDef } from "@tanstack/react-table";
 export type LeaderboardData = {
 	id: number;
 	rank: number;
-	name: string;
+	name: string | null;
 	address: `0x${string}`;
 	points: number;
 };
