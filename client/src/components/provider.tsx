@@ -123,15 +123,15 @@ const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
 
 		if (status === "error") {
 			return (
-				<div className="break-words mx-auto text-red-500">
-					Verification failed. Please try again.
+				<div className="break-words mx-auto text-red-500 mt-5 font-semibold">
+					Verification failed. Please try again!
 				</div>
 			);
 		}
 
 		if (status === "success" || hasProofs()) {
 			return (
-				<div className="break-words mx-auto text-green-500 mt-5">
+				<div className="break-words mx-auto text-green-500 mt-5 font-semibold">
 					Verification success!
 				</div>
 			);
