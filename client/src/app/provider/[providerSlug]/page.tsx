@@ -21,7 +21,7 @@ const ProviderPage = async ({
 
 	return (
 		<main className="flex flex-col items-center justify-center bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] min-h-[100dvh] bg-background">
-			<div className="border-border shadow-shadow text-main-foreground rounded-base bg-main hover:translate-x-boxShadowX hover:translate-y-boxShadowY border-2 p-5 transition-all hover:shadow-none mb-10">
+			<div className="border-border text-main-foreground rounded-base bg-main hover:translate-x-0 hover:translate-y-0 border-2 p-5 transition-all hover:shadow-none mb-10">
 				<Image
 					src={provider.icon}
 					alt={provider.title}
