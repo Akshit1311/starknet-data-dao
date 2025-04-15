@@ -62,6 +62,8 @@ export async function POST(req: Request) {
 			);
 		}
 
+		console.log({ contextMessage: parsedContext.data.contextMessage });
+
 		const parsedContextMsg = ContextMsgSchema.safeParse(
 			JSON.parse(parsedContext.data.contextMessage),
 		);
