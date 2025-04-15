@@ -51,7 +51,9 @@ export const reclaimRouter = createTRPCRouter({
 				ctx.user.userId.toString(),
 			);
 
-			reclaimProofRequest.setAppCallbackUrl("https://local.hemant.mom");
+			reclaimProofRequest.setAppCallbackUrl(
+				"https://bankai-data-dao.vercel.app/api/receive-proofs",
+			);
 
 			const reclaimProofRequestConfig = reclaimProofRequest.toJsonString();
 
