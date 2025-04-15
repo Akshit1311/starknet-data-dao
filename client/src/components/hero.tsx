@@ -108,19 +108,19 @@ export const Skeleton = () => {
 			<div
 				style={{
 					backgroundImage: `url('${SVGDataURI}')`,
-					backgroundSize: "cover",
+					backgroundSize: "contain",
 					backgroundPosition: "top",
 					backgroundRepeat: "no-repeat",
 				}}
-				className="absolute inset-0 mx-auto h-[600px] w-full max-w-[360px] dark:invert dark:filter"
+				className="absolute inset-0 mx-auto dark:invert dark:filter"
 			/>
-			<div className="relative z-20 flex flex-col gap-4 px-[7px] -mt-[76px]">
+			<div className="absolute left-[38px] top-[4px] overflow-hidden rounded-[45px] w-[284px] h-[592px] z-20 flex flex-col gap-4">
 				<video
 					src="/video.mp4"
 					autoPlay
 					loop
 					muted
-					className="rounded-tl-[56px] rounded-tr-[56px]"
+					className="rounded-[45px]"
 				/>
 			</div>
 		</div>
