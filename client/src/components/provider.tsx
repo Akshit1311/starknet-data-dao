@@ -36,14 +36,6 @@ const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
 	const handleProofSuccess = (receivedProofs: TProofs) => {
 		logger.info("RECEIVED PROOFS:", { receivedProofs });
 
-		//@ts-ignore
-		const result = NykaaResSchema.safeParse(receivedProofs?.publicData);
-
-		console.log({
-			result,
-			errors: JSON.stringify(result?.error?.flatten().fieldErrors),
-		});
-
 		if (!receivedProofs) {
 			setProofs(undefined);
 			return;
