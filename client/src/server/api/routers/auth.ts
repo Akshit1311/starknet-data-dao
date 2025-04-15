@@ -83,4 +83,8 @@ export const authRouter = createTRPCRouter({
 
 			return true;
 		}),
+	users: publicProcedure.query(async () => {
+		const users = await db.query.users.findMany();
+		return users;
+	}),
 });
