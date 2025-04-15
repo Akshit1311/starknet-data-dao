@@ -1,7 +1,13 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { index, pgTable } from "drizzle-orm/pg-core";
 
 import { createInsertSchema } from "drizzle-zod";
+
+export const users = pgTable("users", (d) => ({
+	id: d.serial().primaryKey(),
+	address: d.text().unique().notNull().$type<`0x${string}`>(),
+	nickname: d.text(),
+}));
 
 export const nykaaOrders = pgTable(
 	"nykaaOrders",
@@ -25,6 +31,10 @@ export const nykaaOrders = pgTable(
 		productUrl: d.text(),
 		unitPrice: d.integer(),
 		updatedAt: d.timestamp({ withTimezone: true }).$onUpdate(() => new Date()),
+		userId: d
+			.integer()
+			.notNull()
+			.references(() => users.id),
 	}),
 	(t) => [
 		index("product_sku_idx").on(t.itemSku),
@@ -33,6 +43,13 @@ export const nykaaOrders = pgTable(
 		index("product_id_idx").on(t.productId),
 	],
 );
+
+export const nykaaToUsersRelations = relations(nykaaOrders, ({ one }) => ({
+	invitee: one(users, {
+		fields: [nykaaOrders.userId],
+		references: [users.id],
+	}),
+}));
 
 export const NykaaOrdersSchema = createInsertSchema(nykaaOrders).omit({
 	id: true,
@@ -51,7 +68,21 @@ export const linkedinConnections = pgTable("linkedinConnections", (d) => ({
 	name: d.text(),
 	pfp: d.text(),
 	url: d.text().unique(),
+	userId: d
+		.integer()
+		.notNull()
+		.references(() => users.id),
 }));
+
+export const linkedinToUsersRelations = relations(
+	linkedinConnections,
+	({ one }) => ({
+		invitee: one(users, {
+			fields: [linkedinConnections.userId],
+			references: [users.id],
+		}),
+	}),
+);
 
 export const LinkedinConnectionsSchema = createInsertSchema(
 	linkedinConnections,
@@ -72,6 +103,17 @@ export const zomatoOrders = pgTable("zomatoOrders", (d) => ({
 	// orderId: d.bigint({ mode: "bigint" }),
 	restaurantURL: d.text(),
 	totalCost: d.text(),
+	userId: d
+		.integer()
+		.notNull()
+		.references(() => users.id),
+}));
+
+export const zomatoToUsersRelations = relations(zomatoOrders, ({ one }) => ({
+	invitee: one(users, {
+		fields: [zomatoOrders.userId],
+		references: [users.id],
+	}),
 }));
 
 export const ZomatoOrdersSchema = createInsertSchema(zomatoOrders).omit({
@@ -91,6 +133,17 @@ export const uberPastTrips = pgTable("uberPastTrips", (d) => ({
 	fare: d.text(),
 	pickupAddress: d.text(),
 	vehicleType: d.text(),
+	userId: d
+		.integer()
+		.notNull()
+		.references(() => users.id),
+}));
+
+export const uberToUsersRelations = relations(uberPastTrips, ({ one }) => ({
+	invitee: one(users, {
+		fields: [uberPastTrips.userId],
+		references: [users.id],
+	}),
 }));
 
 export const UberPastTripsSchema = createInsertSchema(uberPastTrips).omit({

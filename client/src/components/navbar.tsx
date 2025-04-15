@@ -10,7 +10,7 @@ import {
 } from "@starknet-react/core";
 import { X } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { constants, num } from "starknet";
 import {
 	type ConnectOptionsWithConnectors,
@@ -31,6 +31,7 @@ import { useUserStore } from "~/store/useUserStore";
 
 import { usePathname } from "next/navigation";
 import { Button, buttonVariants } from "./ui/button";
+import NickInput from "./NickInput";
 
 export const getConnectors = (isMobile: boolean) => {
 	const mobileConnector = ArgentMobileConnector.init({
@@ -70,7 +71,9 @@ export const getConnectors = (isMobile: boolean) => {
 		: [argentXConnector, braavosConnector, mobileConnector, webWalletConnector];
 };
 
-const Navbar = () => {
+const Navbar = ({ nickname }: { nickname?: string | null }) => {
+	const [isNickOpen, setIsNickOpen] = useState(true);
+
 	const { address, connector, chainId } = useAccount();
 	const { connect: connectSnReact } = useConnect();
 	const { disconnectAsync } = useDisconnect();
@@ -243,6 +246,14 @@ const Navbar = () => {
 						</div>
 					)}
 				</div>
+
+				{address && !nickname && (
+					<NickInput
+						isNickOpen={isNickOpen}
+						onClose={() => setIsNickOpen(false)}
+						address={address}
+					/>
+				)}
 			</div>
 		</nav>
 	);

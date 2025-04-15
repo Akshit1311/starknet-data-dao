@@ -7,6 +7,7 @@ import Providers from "~/providers";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/styles/globals.css";
+import { auth } from "~/server/utils";
 
 export const metadata: Metadata = {
 	title: "Create T3 App",
@@ -19,15 +20,19 @@ const geist = Geist({
 	variable: "--font-geist-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
+	const authData = await auth();
+
+	console.log({ authData });
+
 	return (
 		<html lang="en" className={`${geist.variable}`}>
 			<body className="font-jetbrainsMono">
 				<TRPCReactProvider>
 					<Providers>
-						<Navbar />
+						<Navbar nickname={authData?.nickname} />
 						{children}
 						<Toaster />
 					</Providers>

@@ -19,3 +19,10 @@ export type TPublicData = {
 };
 
 export const NykaaResSchema = z.object({ orders: z.array(NykaaOrdersSchema) });
+
+export const WalletSchema = z.custom<`0x${string}`>(
+	(val) => typeof val === "string" && /^0x[a-fA-F0-9]{64}$/.test(val),
+	{
+		message: "Invalid wallet address",
+	},
+);

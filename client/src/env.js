@@ -13,6 +13,7 @@ export const env = createEnv({
       .default("development"),
     RECLAIM_APP_ID: z.string(),
     RECLAIM_APP_SECRET: z.string(),
+    JWT_SECRET: z.string(),
   },
 
   /**
@@ -33,6 +34,7 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     RECLAIM_APP_ID: process.env.RECLAIM_APP_ID,
     RECLAIM_APP_SECRET: process.env.RECLAIM_APP_SECRET,
+    JWT_SECRET: process.env.JWT_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
