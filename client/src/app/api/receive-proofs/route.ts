@@ -32,11 +32,6 @@ const ContextSchema = z.object({
 	contextMessage: z.string(),
 });
 
-const ContextMsgSchema = z.object({
-	userId: z.number(),
-	slug: z.string(),
-});
-
 export async function POST(req: Request) {
 	try {
 		const data = await req.text();
@@ -49,42 +44,10 @@ export async function POST(req: Request) {
 		const parsedContext = ContextSchema.safeParse(context);
 
 		if (!parsedContext.success) {
-			console.dir(
-				{
-					message: "context errored!",
-					error: parsedContext.error,
-				},
-				{ depth: null },
-			);
-			return Response.json(
-				{ message: "context errored!", error: parsedContext.error },
-				{ status: 500 },
-			);
+			return Response.json({ message: "context errored!" }, { status: 500 });
 		}
 
-		console.log({ contextMessage: parsedContext.data.contextMessage });
-
-		const parsedContextMsg = ContextMsgSchema.safeParse(
-			JSON.parse(parsedContext.data.contextMessage),
-		);
-
-		if (!parsedContextMsg.success) {
-			console.dir(
-				{
-					message: "context msg errored!",
-					error: parsedContextMsg.error,
-					contextMessage: parsedContext.data.contextMessage,
-				},
-				{ depth: null },
-			);
-
-			return Response.json(
-				{ message: "context msg errored!" },
-				{ status: 500 },
-			);
-		}
-
-		const userId = parsedContextMsg.data.userId;
+		const userId = Number.parseInt(parsedContext.data.contextMessage);
 
 		console.log({
 			userId,
@@ -95,7 +58,7 @@ export async function POST(req: Request) {
 		// nykaa
 		const parsedData = NykaaResSchema.safeParse(proof.publicData);
 
-		if (parsedData.success && parsedContextMsg.data.slug === "nykaa-orders") {
+		if (parsedData.success) {
 			const insertedIds = await db
 				.insert(nykaaOrders)
 				.values(parsedData.data.orders.map((o) => ({ ...o, userId })))
@@ -116,10 +79,7 @@ export async function POST(req: Request) {
 
 		console.dir({ parsedLinkedInData }, { depth: null });
 
-		if (
-			parsedLinkedInData.success &&
-			parsedContextMsg.data.slug === "linkedin-connections"
-		) {
+		if (parsedLinkedInData.success) {
 			const insertedIds = await db
 				.insert(linkedinConnections)
 				.values(
