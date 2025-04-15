@@ -29,7 +29,7 @@ const LinkedInResSchema = z.object({
 const UberResSchema = z.object({ trips: z.array(UberPastTripsSchema) });
 
 const ContextSchema = z.object({
-	contextAddress: WalletSchema,
+	// contextAddress: WalletSchema,
 	contextMessage: z.string(),
 });
 
