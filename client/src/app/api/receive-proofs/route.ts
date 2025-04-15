@@ -19,7 +19,10 @@ export async function GET() {
 }
 
 const NykaaResSchema = z.object({ orders: z.array(NykaaOrdersSchema) });
-const ZomatoResSchema = z.object({ orders: z.array(ZomatoOrdersSchema) });
+const ZomatoResSchema = z.object({
+	orders: z.array(ZomatoOrdersSchema),
+	userid: z.string(),
+});
 const LinkedInResSchema = z.object({
 	data: z.object({
 		connectionsList: z.array(LinkedinConnectionsSchema),
@@ -54,6 +57,24 @@ export async function POST(req: Request) {
 			ctxMsg: parsedContext.data.contextMessage,
 			parsedContext,
 		});
+
+		// zomato order history
+		const parsedZomatoOrders = ZomatoResSchema.safeParse(proof.publicData);
+		if (parsedZomatoOrders.success) {
+			const insertedIds = await db
+				.insert(zomatoOrders)
+				.values(parsedZomatoOrders.data.orders.map((o) => ({ ...o, userId })))
+				.onConflictDoNothing()
+				.returning({
+					id: zomatoOrders.id,
+				});
+
+			console.dir({ insertedIds }, { depth: null });
+
+			console.log({ orders: parsedZomatoOrders });
+
+			return Response.json({ message: "Updated data in db successfully" });
+		}
 
 		// nykaa
 		const parsedData = NykaaResSchema.safeParse(proof.publicData);
@@ -98,24 +119,6 @@ export async function POST(req: Request) {
 			console.log({
 				connections: parsedLinkedInData.data.data.connectionsList,
 			});
-
-			return Response.json({ message: "Updated data in db successfully" });
-		}
-
-		// zomato order history
-		const parsedZomatoOrders = ZomatoResSchema.safeParse(proof.publicData);
-		if (parsedZomatoOrders.success) {
-			const insertedIds = await db
-				.insert(zomatoOrders)
-				.values(parsedZomatoOrders.data.orders.map((o) => ({ ...o, userId })))
-				.onConflictDoNothing()
-				.returning({
-					id: zomatoOrders.id,
-				});
-
-			console.dir({ insertedIds }, { depth: null });
-
-			console.log({ orders: parsedZomatoOrders });
 
 			return Response.json({ message: "Updated data in db successfully" });
 		}
