@@ -49,7 +49,17 @@ export async function POST(req: Request) {
 		const parsedContext = ContextSchema.safeParse(context);
 
 		if (!parsedContext.success) {
-			return Response.json({ message: "context errored!" }, { status: 500 });
+			console.dir(
+				{
+					message: "context errored!",
+					error: parsedContext.error,
+				},
+				{ depth: null },
+			);
+			return Response.json(
+				{ message: "context errored!", error: parsedContext.error },
+				{ status: 500 },
+			);
 		}
 
 		const parsedContextMsg = ContextMsgSchema.safeParse(
@@ -57,6 +67,15 @@ export async function POST(req: Request) {
 		);
 
 		if (!parsedContextMsg.success) {
+			console.dir(
+				{
+					message: "context msg errored!",
+					error: parsedContextMsg.error,
+					contextMessage: parsedContext.data.contextMessage,
+				},
+				{ depth: null },
+			);
+
 			return Response.json(
 				{ message: "context msg errored!" },
 				{ status: 500 },
