@@ -2,6 +2,7 @@ import type { Proof } from "@reclaimprotocol/js-sdk";
 import { z } from "zod";
 
 import { PROVIDERS_INFO } from "~/constants";
+import { NykaaOrdersSchema } from "~/server/db/schema";
 
 export type TProofs = string[] | string | Proof | Proof[] | undefined;
 
@@ -16,3 +17,5 @@ export const ProviderSchema = z.custom<TProviders>((val) => {
 export type TPublicData = {
 	[key: string]: string;
 };
+
+export const NykaaResSchema = z.object({ orders: z.array(NykaaOrdersSchema) });

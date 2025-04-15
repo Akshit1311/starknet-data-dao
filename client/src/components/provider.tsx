@@ -8,7 +8,12 @@ import QRCode from "react-qr-code";
 
 import { logger } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import type { TProofs, TProviders, TPublicData } from "~/types";
+import {
+	NykaaResSchema,
+	type TProofs,
+	type TProviders,
+	type TPublicData,
+} from "~/types";
 
 import { Button } from "./ui/button";
 
@@ -30,6 +35,14 @@ const Provider: React.FC<ProviderProps> = ({ providerSlug }) => {
 
 	const handleProofSuccess = (receivedProofs: TProofs) => {
 		logger.info("RECEIVED PROOFS:", { receivedProofs });
+
+		//@ts-ignore
+		const result = NykaaResSchema.safeParse(receivedProofs?.publicData);
+
+		console.log({
+			result,
+			errors: JSON.stringify(result?.error?.flatten().fieldErrors),
+		});
 
 		if (!receivedProofs) {
 			setProofs(undefined);
