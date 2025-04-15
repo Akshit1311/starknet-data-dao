@@ -43,8 +43,6 @@ const ProviderPage = async ({
 			</div>
 
 			<Analytics analyticSlug={analyticSlug} />
-
-			{/* <Provider analyticSlug={parsedData.data} /> */}
 		</main>
 	);
 };

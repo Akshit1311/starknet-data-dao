@@ -11,13 +11,13 @@ export interface AnalyticsProps {
 const Analytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	switch (analyticSlug) {
 		case "linkedin-connections":
-			return <div>LinkedIn Connections Analytics</div>;
+			return <div>Coming soon...</div>;
 		case "nykaa-orders":
-			return <div>Nykka Orders Analytics</div>;
+			return <div>Coming soon...</div>;
 		case "zomato-orders":
 			return <ZomatoAnalytics analyticSlug={analyticSlug} />;
 		case "uber-past-trips":
-			return <div>Uber Past Trips Analytics</div>;
+			return <div>Coming soon...</div>;
 		default:
 			return <div>Analytics not found</div>;
 	}
