@@ -11,6 +11,7 @@ import {
 	zomatoOrders,
 	ZomatoOrdersSchema,
 } from "~/server/db/schema";
+import { WalletSchema } from "~/types";
 
 export const dynamic = "force-static";
 
@@ -27,6 +28,11 @@ const LinkedInResSchema = z.object({
 });
 const UberResSchema = z.object({ trips: z.array(UberPastTripsSchema) });
 
+const ContextSchema = z.object({
+	contextAddress: WalletSchema,
+	contextMessage: z.string(),
+});
+
 export async function POST(req: Request) {
 	try {
 		const data = await req.text();
@@ -34,13 +40,26 @@ export async function POST(req: Request) {
 		const decodedBody = decodeURIComponent(data);
 		const proof: Proof = JSON.parse(decodedBody);
 
+		const context = JSON.parse(proof.claimData.context);
+
+		const parsedContext = ContextSchema.safeParse(context);
+
+		if (!parsedContext.success) {
+			return Response.json({ message: "context errored!" }, { status: 500 });
+		}
+
+		const userId = Number.parseInt(parsedContext.data.contextMessage);
+
 		// nykaa
 		const parsedData = NykaaResSchema.safeParse(proof.publicData);
 
 		if (parsedData.success) {
 			const insertedIds = await db
 				.insert(nykaaOrders)
-				.values(parsedData.data.orders)
+				.values({
+					...parsedData.data.orders,
+					userId,
+				})
 				.onConflictDoNothing()
 				.returning({
 					id: nykaaOrders.id,
@@ -61,7 +80,7 @@ export async function POST(req: Request) {
 		if (parsedLinkedInData.success) {
 			const insertedIds = await db
 				.insert(linkedinConnections)
-				.values(parsedLinkedInData.data.data.connectionsList)
+				.values({ ...parsedLinkedInData.data.data.connectionsList, userId })
 				.onConflictDoNothing()
 				.returning({
 					id: linkedinConnections.id,
@@ -81,7 +100,7 @@ export async function POST(req: Request) {
 		if (parsedZomatoOrders.success) {
 			const insertedIds = await db
 				.insert(zomatoOrders)
-				.values(parsedZomatoOrders.data.orders)
+				.values({ ...parsedZomatoOrders.data.orders, userId })
 				.onConflictDoNothing()
 				.returning({
 					id: zomatoOrders.id,
@@ -100,7 +119,7 @@ export async function POST(req: Request) {
 		if (parsedUberTrips.success) {
 			const insertedIds = await db
 				.insert(uberPastTrips)
-				.values(parsedUberTrips.data.trips)
+				.values({ ...parsedUberTrips.data.trips, userId })
 				.onConflictDoNothing()
 				.returning({
 					id: uberPastTrips.id,

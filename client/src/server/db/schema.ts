@@ -55,6 +55,7 @@ export const NykaaOrdersSchema = createInsertSchema(nykaaOrders).omit({
 	id: true,
 	updatedAt: true,
 	createdAt: true,
+	userId: true,
 });
 
 export const linkedinConnections = pgTable("linkedinConnections", (d) => ({
@@ -90,6 +91,7 @@ export const LinkedinConnectionsSchema = createInsertSchema(
 	id: true,
 	updatedAt: true,
 	createdAt: true,
+	userId: true,
 });
 
 export const zomatoOrders = pgTable("zomatoOrders", (d) => ({
@@ -120,6 +122,7 @@ export const ZomatoOrdersSchema = createInsertSchema(zomatoOrders).omit({
 	id: true,
 	updatedAt: true,
 	createdAt: true,
+	userId: true,
 });
 
 export const uberPastTrips = pgTable("uberPastTrips", (d) => ({
@@ -150,4 +153,5 @@ export const UberPastTripsSchema = createInsertSchema(uberPastTrips).omit({
 	id: true,
 	updatedAt: true,
 	createdAt: true,
+	userId: true,
 });

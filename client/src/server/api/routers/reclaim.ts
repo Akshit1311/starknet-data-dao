@@ -4,7 +4,11 @@ import { z } from "zod";
 import { PROVIDERS_INFO } from "~/constants";
 import { env } from "~/env";
 import { logger } from "~/lib/utils";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import {
+	createTRPCRouter,
+	protectedProcedure,
+	publicProcedure,
+} from "~/server/api/trpc";
 import { ProviderSchema } from "~/types";
 
 export const reclaimRouter = createTRPCRouter({
@@ -16,13 +20,13 @@ export const reclaimRouter = createTRPCRouter({
 			};
 		}),
 
-	generateConfig: publicProcedure
+	generateConfig: protectedProcedure
 		.input(
 			z.object({
 				providerSlug: ProviderSchema,
 			}),
 		)
-		.mutation(async ({ input }) => {
+		.mutation(async ({ input, ctx }) => {
 			const providerSlug = input.providerSlug;
 
 			const categoryId = PROVIDERS_INFO[input.providerSlug].categoryId;
@@ -40,6 +44,11 @@ export const reclaimRouter = createTRPCRouter({
 				// 	device: "ios", // "android", // according to user agent
 				// 	useAppClip: true, // false for desktops
 				// },
+			);
+
+			reclaimProofRequest.addContext(
+				ctx.user.address,
+				ctx.user.userId.toString(),
 			);
 
 			reclaimProofRequest.setAppCallbackUrl(
