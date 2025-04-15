@@ -46,6 +46,13 @@ export const reclaimRouter = createTRPCRouter({
 				// },
 			);
 
+			console.log("addContext");
+
+			console.log({
+				address: ctx.user.address,
+				userId: ctx.user.userId.toString(),
+			});
+
 			reclaimProofRequest.addContext(
 				ctx.user.address,
 				ctx.user.userId.toString(),

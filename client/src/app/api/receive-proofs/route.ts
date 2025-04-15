@@ -50,16 +50,19 @@ export async function POST(req: Request) {
 
 		const userId = Number.parseInt(parsedContext.data.contextMessage);
 
+		console.log({
+			userId,
+			ctxMsg: parsedContext.data.contextMessage,
+			parsedContext,
+		});
+
 		// nykaa
 		const parsedData = NykaaResSchema.safeParse(proof.publicData);
 
 		if (parsedData.success) {
 			const insertedIds = await db
 				.insert(nykaaOrders)
-				.values({
-					...parsedData.data.orders,
-					userId,
-				})
+				.values(parsedData.data.orders.map((o) => ({ ...o, userId })))
 				.onConflictDoNothing()
 				.returning({
 					id: nykaaOrders.id,
@@ -80,7 +83,12 @@ export async function POST(req: Request) {
 		if (parsedLinkedInData.success) {
 			const insertedIds = await db
 				.insert(linkedinConnections)
-				.values({ ...parsedLinkedInData.data.data.connectionsList, userId })
+				.values(
+					parsedLinkedInData.data.data.connectionsList.map((o) => ({
+						...o,
+						userId,
+					})),
+				)
 				.onConflictDoNothing()
 				.returning({
 					id: linkedinConnections.id,
@@ -100,7 +108,7 @@ export async function POST(req: Request) {
 		if (parsedZomatoOrders.success) {
 			const insertedIds = await db
 				.insert(zomatoOrders)
-				.values({ ...parsedZomatoOrders.data.orders, userId })
+				.values(parsedZomatoOrders.data.orders.map((o) => ({ ...o, userId })))
 				.onConflictDoNothing()
 				.returning({
 					id: zomatoOrders.id,
@@ -119,7 +127,7 @@ export async function POST(req: Request) {
 		if (parsedUberTrips.success) {
 			const insertedIds = await db
 				.insert(uberPastTrips)
-				.values({ ...parsedUberTrips.data.trips, userId })
+				.values(parsedUberTrips.data.trips.map((o) => ({ ...o, userId })))
 				.onConflictDoNothing()
 				.returning({
 					id: uberPastTrips.id,
