@@ -234,7 +234,7 @@ function ChartTooltipContent({
 										</div>
 										{item.value && (
 											<span className="ml-4 text-foreground font-mono font-medium tabular-nums">
-												₹{item.value.toLocaleString()}
+												{item.value.toLocaleString()}
 											</span>
 										)}
 									</div>

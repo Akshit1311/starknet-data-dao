@@ -2,6 +2,7 @@ import type React from "react";
 
 import type { TProviderInfoKeys } from "~/constants";
 
+import LinkedInAnalytics from "./linkedin";
 import NykkaAnalytics from "./nykka";
 import UberAnalytics from "./uber";
 import ZomatoAnalytics from "./zomato";
@@ -13,7 +14,7 @@ export interface AnalyticsProps {
 const Analytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	switch (analyticSlug) {
 		case "linkedin-connections":
-			return <div>Coming soon...</div>;
+			return <LinkedInAnalytics analyticSlug={analyticSlug} />;
 		case "nykaa-orders":
 			return <NykkaAnalytics analyticSlug={analyticSlug} />;
 		case "zomato-orders":
