@@ -2,6 +2,7 @@ import type React from "react";
 
 import type { TProviderInfoKeys } from "~/constants";
 
+import UberAnalytics from "./uber";
 import ZomatoAnalytics from "./zomato";
 
 export interface AnalyticsProps {
@@ -17,7 +18,7 @@ const Analytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 		case "zomato-orders":
 			return <ZomatoAnalytics analyticSlug={analyticSlug} />;
 		case "uber-past-trips":
-			return <div>Coming soon...</div>;
+			return <UberAnalytics analyticSlug={analyticSlug} />;
 		default:
 			return <div>Analytics not found</div>;
 	}

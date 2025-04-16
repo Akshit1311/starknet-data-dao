@@ -17,7 +17,7 @@ export type OrderChartData = {
 	cost: number;
 };
 
-const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
+const UberAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	const { address } = useAccount();
 
 	const { data } = api.auth.providerInfo.useQuery(
@@ -117,4 +117,4 @@ const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	);
 };
 
-export default ZomatoAnalytics;
+export default UberAnalytics;
