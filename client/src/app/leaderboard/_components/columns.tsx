@@ -1,6 +1,7 @@
 "use client";
 
 import type { ColumnDef } from "@tanstack/react-table";
+import { standariseAddress } from "~/lib/utils";
 
 export type LeaderboardData = {
 	id: number;
@@ -18,6 +19,17 @@ export const columns: ColumnDef<LeaderboardData>[] = [
 	{
 		accessorKey: "name",
 		header: "Name",
+		filterFn: (row, columnId, filterValue) => {
+			const name = row.getValue<string | null>(columnId);
+			const address = row.getValue<string>("address");
+			const search = filterValue.toLowerCase();
+
+			return (
+				name?.toLowerCase().includes(search) ||
+				address.toLowerCase().includes(search) ||
+				standariseAddress(address).toLowerCase().includes(search)
+			);
+		},
 	},
 	{
 		accessorKey: "address",
