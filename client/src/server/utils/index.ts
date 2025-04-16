@@ -20,16 +20,15 @@ export const createAndSetToken = async (data: TokenPayload) => {
 		expiresIn: "100d",
 	});
 
-	c.set(`${TOKEN_COOKIE}_${data.address}`, j);
+	c.set(TOKEN_COOKIE, j);
 
 	console.log("token set succssfully", { data });
 };
 
-export const auth = async (address: string) => {
+export const auth = async () => {
 	const c = await cookies();
 
-	const token = c.get(`${TOKEN_COOKIE}_${address}`)?.value;
-
+	const token = c.get(TOKEN_COOKIE)?.value;
 	if (!token) return null;
 
 	try {
@@ -38,8 +37,7 @@ export const auth = async (address: string) => {
 		return data;
 	} catch (error) {
 		console.error("error verifying token", error);
-		c.delete(`${TOKEN_COOKIE}_${address}`);
-
+		c.delete(TOKEN_COOKIE);
 		return null;
 	}
 };

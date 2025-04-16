@@ -72,8 +72,8 @@ export const getConnectors = (isMobile: boolean) => {
 		: [argentXConnector, braavosConnector, mobileConnector, webWalletConnector];
 };
 
-const Navbar = () => {
-	const [isNickOpen, setIsNickOpen] = React.useState(true);
+const Navbar = ({ nickname }: { nickname?: string | null }) => {
+	const [isNickOpen, setIsNickOpen] = useState(true);
 	const [authData, setAuthData] = React.useState<TokenPayload | null>(null);
 
 	const { address, connector, chainId } = useAccount();
@@ -163,29 +163,6 @@ const Navbar = () => {
 			setProvider(getProvider());
 		}
 	}, [address, setAddress, setProvider]);
-
-	React.useEffect(() => {
-		if (!address) return;
-
-		const checkAuth = async () => {
-			try {
-				const response = await fetch("/api/auth", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({ address }),
-				});
-				const data = await response.json();
-
-				setAuthData(data);
-			} catch (error) {
-				console.error("Auth check failed:", error);
-			}
-		};
-
-		checkAuth();
-	}, [address]);
 
 	const NAV_LINKS = [
 		{ href: "/", text: "Home", isActive: pathname === "/" },
@@ -277,7 +254,7 @@ const Navbar = () => {
 					)}
 				</div>
 
-				{address && !authData?.nickname && (
+				{address && !nickname && (
 					<NickInput
 						isNickOpen={isNickOpen}
 						onClose={() => setIsNickOpen(false)}
