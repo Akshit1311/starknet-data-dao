@@ -1,12 +1,13 @@
 import "server-only";
 
-import { cookies } from "next/headers";
 import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+
 import { env } from "~/env";
 
 export const TOKEN_COOKIE = "__BANKAI_TOKEN__";
 
-type TokenPayload = {
+export type TokenPayload = {
 	address: `0x${string}`;
 	userId: number;
 	nickname: string | null;
@@ -19,15 +20,15 @@ export const createAndSetToken = async (data: TokenPayload) => {
 		expiresIn: "100d",
 	});
 
-	c.set(TOKEN_COOKIE, j);
+	c.set(`${TOKEN_COOKIE}_${data.address}`, j);
 
 	console.log("token set succssfully", { data });
 };
 
-export const auth = async () => {
+export const auth = async (address: string) => {
 	const c = await cookies();
 
-	const token = c.get(TOKEN_COOKIE)?.value;
+	const token = c.get(`${TOKEN_COOKIE}_${address}`)?.value;
 
 	if (!token) return null;
 
@@ -37,7 +38,7 @@ export const auth = async () => {
 		return data;
 	} catch (error) {
 		console.error("error verifying token", error);
-		c.delete(TOKEN_COOKIE);
+		c.delete(`${TOKEN_COOKIE}_${address}`);
 
 		return null;
 	}
