@@ -11,10 +11,9 @@ import { api } from "~/trpc/react";
 import type { AnalyticsProps } from "..";
 import Chart from "./chart";
 
-// Define a type for chart data
-export type OrderChartData = {
+export type TripChartData = {
 	month: string;
-	cost: number;
+	trips: number;
 };
 
 const UberAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
@@ -31,56 +30,60 @@ const UberAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 		},
 	);
 
-	const totalCost: number = data?.providerResult.reduce(
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-		(acc: number, order: any) => {
-			if (order.totalCost) {
-				const cost = order.totalCost.replace(/[^0-9.-]+/g, "");
-				const parsedCost = Number(cost);
+	const totalTrips = data?.providerResult?.length || 0;
 
-				return acc + parsedCost;
+	const completedTrips =
+		data?.providerResult?.filter(
+			(trip: { dropoffTime: string }) =>
+				trip.dropoffTime && trip.dropoffTime !== "",
+		).length || 0;
+
+	const totalSpent =
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		data?.providerResult?.reduce((acc: any, trip: any) => {
+			if (trip.fare) {
+				const fareAmount = Number.parseFloat(
+					trip.fare.replace(/[^0-9.-]+/g, ""),
+				);
+				// biome-ignore lint/suspicious/noGlobalIsNan: <explanation>
+				return isNaN(fareAmount) ? acc : acc + fareAmount;
 			}
 			return acc;
-		},
-		0,
-	);
+		}, 0) || 0;
 
-	const totalOrders = data?.providerResult.length;
-
-	const getMonthlyChartData = (): OrderChartData[] => {
+	const getMonthlyChartData = (): TripChartData[] => {
 		if (!data?.providerResult || data.providerResult.length === 0) {
 			return [];
 		}
 
-		const monthlyTotals: Record<string, number> = {};
+		const monthlyTrips: Record<string, number> = {};
 
-		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 		// biome-ignore lint/complexity/noForEach: <explanation>
-		data.providerResult.forEach((order: any) => {
-			if (order.createdAt && order.totalCost) {
-				const orderDate = new Date(order.createdAt);
-				const month = orderDate.toLocaleString("default", { month: "long" });
+		// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+		data.providerResult.forEach((trip: any) => {
+			if (trip.beginTripTime) {
+				const tripDate = new Date(trip.beginTripTime);
+				const month = tripDate.toLocaleString("default", { month: "long" });
+				const year = tripDate.getFullYear();
+				const monthYear = `${month} ${year}`;
 
-				const cost = order.totalCost.replace(/[^0-9.-]+/g, "");
-				const parsedCost = Number(cost);
-
-				if (monthlyTotals[month]) {
-					monthlyTotals[month] += parsedCost;
-				} else {
-					monthlyTotals[month] = parsedCost;
-				}
+				monthlyTrips[monthYear] = (monthlyTrips[monthYear] || 0) + 1;
 			}
 		});
 
-		return Object.entries(monthlyTotals)
-			.map(([month, cost]) => ({
+		return Object.entries(monthlyTrips)
+			.map(([month, trips]) => ({
 				month,
-				cost: Math.round(cost),
+				trips,
 			}))
-			.reverse();
+			.sort((a, b) => {
+				const monthA = new Date(a.month);
+				const monthB = new Date(b.month);
+				return monthA.getTime() - monthB.getTime();
+			});
 	};
 
-	const orderChartData = getMonthlyChartData();
+	const tripChartData = getMonthlyChartData();
 
 	if (!address) {
 		return <div>Connect your wallet</div>;
@@ -96,23 +99,32 @@ const UberAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 			>
 				<div className="flex justify-between w-full items-start">
 					<p className="text-black/60">
-						Total cost:{" "}
-						<span className="text-black font-semibold">
-							₹{formatNumberWithCommas(totalCost?.toFixed(2))}
-						</span>
+						Total trips:{" "}
+						<span className="text-black font-semibold">{totalTrips}</span>
 					</p>
 					<p className="text-black/60">
-						Total orders:{" "}
-						<span className="text-black font-semibold">{totalOrders}</span>
+						Completed trips:{" "}
+						<span className="text-black font-semibold">{completedTrips}</span>
 					</p>
+					{totalSpent > 0 && (
+						<p className="text-black/60">
+							Total spent:{" "}
+							<span className="text-black font-semibold">
+								₹{formatNumberWithCommas(totalSpent.toFixed(2))}
+							</span>
+						</p>
+					)}
 				</div>
 
 				<div className="mt-6 h-full w-full -ml-4">
-					<Chart chartData={orderChartData} />
+					<Chart chartData={tripChartData} />
 				</div>
 			</div>
 
-			<DownloadData data={data?.providerResult} />
+			<DownloadData
+				data={data?.providerResult}
+				fileName={analyticSlug.replace(/-/g, "_")}
+			/>
 		</div>
 	);
 };

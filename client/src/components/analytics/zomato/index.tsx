@@ -112,7 +112,10 @@ const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 				</div>
 			</div>
 
-			<DownloadData data={data?.providerResult} />
+			<DownloadData
+				data={data?.providerResult}
+				fileName={analyticSlug.replace(/-/g, "_")}
+			/>
 		</div>
 	);
 };

@@ -19,16 +19,19 @@ import { Button, buttonVariants } from "./ui/button";
 type DownloadDataProps = {
 	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	data: any;
+	fileName?: string;
 };
 
-const DownloadData: React.FC<DownloadDataProps> = ({ data }) => {
+const DownloadData: React.FC<DownloadDataProps> = ({
+	data,
+	fileName = "bankai_download",
+}) => {
 	const [extension, setExtension] = React.useState<ExportType>("csv");
 
 	const handleDownload = () => {
-		const fileName = "bankai_data_download";
-		const exportType = extension;
-
-		exportFromJSON({ data, fileName, exportType });
+		if (data && data.length > 0) {
+			exportFromJSON({ data, fileName, exportType: extension });
+		}
 	};
 
 	return (
@@ -46,7 +49,7 @@ const DownloadData: React.FC<DownloadDataProps> = ({ data }) => {
 				<SelectTrigger className={cn(buttonVariants(), "w-fit")}>
 					<SelectValue />
 				</SelectTrigger>
-				<SelectContent>
+				<SelectContent className="bg-white">
 					<SelectGroup>
 						<SelectItem value="csv">.csv</SelectItem>
 						<SelectItem value="json">.json</SelectItem>
