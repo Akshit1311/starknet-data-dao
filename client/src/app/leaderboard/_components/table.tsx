@@ -62,7 +62,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ data }) => {
 		<div className="w-full font-base text-main-foreground">
 			<div className="flex items-center py-4">
 				<Input
-					placeholder="Search name..."
+					placeholder="Search name or address..."
 					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
 					onChange={(event) =>
 						table.getColumn("name")?.setFilterValue(event.target.value)

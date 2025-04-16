@@ -8,12 +8,7 @@ import QRCode from "react-qr-code";
 
 import { logger } from "~/lib/utils";
 import { api } from "~/trpc/react";
-import {
-	NykaaResSchema,
-	type TProofs,
-	type TProviders,
-	type TPublicData,
-} from "~/types";
+import type { TProofs, TProviders, TPublicData } from "~/types";
 
 import { Button } from "./ui/button";
 

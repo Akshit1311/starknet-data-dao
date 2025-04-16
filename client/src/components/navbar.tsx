@@ -10,6 +10,7 @@ import {
 } from "@starknet-react/core";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 import { constants, num } from "starknet";
 import {
@@ -27,9 +28,9 @@ import { WebWalletConnector } from "starknetkit/webwallet";
 import { NETWORK, getProvider } from "~/constants";
 import { useIsMobile } from "~/hooks/useIsMobile";
 import { cn, copyAddressToClipboard, shortAddress } from "~/lib/utils";
+import { type TokenPayload, auth } from "~/server/utils";
 import { useUserStore } from "~/store/useUserStore";
 
-import { usePathname } from "next/navigation";
 import NickInput from "./NickInput";
 import { Button, buttonVariants } from "./ui/button";
 
@@ -71,8 +72,9 @@ export const getConnectors = (isMobile: boolean) => {
 		: [argentXConnector, braavosConnector, mobileConnector, webWalletConnector];
 };
 
-const Navbar = ({ nickname }: { nickname?: string | null }) => {
-	const [isNickOpen, setIsNickOpen] = useState(true);
+const Navbar = () => {
+	const [isNickOpen, setIsNickOpen] = React.useState(true);
+	const [authData, setAuthData] = React.useState<TokenPayload | null>(null);
 
 	const { address, connector, chainId } = useAccount();
 	const { connect: connectSnReact } = useConnect();
@@ -125,6 +127,11 @@ const Navbar = ({ nickname }: { nickname?: string | null }) => {
 		[connectSnReact, connectorConfig],
 	);
 
+	const handleDisconnect = React.useCallback(() => {
+		disconnect();
+		disconnectAsync();
+	}, [disconnectAsync]);
+
 	// use effects
 	React.useEffect(() => {
 		if (
@@ -157,10 +164,28 @@ const Navbar = ({ nickname }: { nickname?: string | null }) => {
 		}
 	}, [address, setAddress, setProvider]);
 
-	const handleDisconnect = React.useCallback(() => {
-		disconnect();
-		disconnectAsync();
-	}, [disconnectAsync]);
+	React.useEffect(() => {
+		if (!address) return;
+
+		const checkAuth = async () => {
+			try {
+				const response = await fetch("/api/auth", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ address }),
+				});
+				const data = await response.json();
+
+				setAuthData(data);
+			} catch (error) {
+				console.error("Auth check failed:", error);
+			}
+		};
+
+		checkAuth();
+	}, [address]);
 
 	const NAV_LINKS = [
 		{ href: "/", text: "Home", isActive: pathname === "/" },
@@ -252,7 +277,7 @@ const Navbar = ({ nickname }: { nickname?: string | null }) => {
 					)}
 				</div>
 
-				{address && !nickname && (
+				{address && !authData?.nickname && (
 					<NickInput
 						isNickOpen={isNickOpen}
 						onClose={() => setIsNickOpen(false)}

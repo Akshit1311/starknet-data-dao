@@ -28,16 +28,12 @@ const jetbrainsMono = JetBrains_Mono({
 export default async function RootLayout({
 	children,
 }: Readonly<{ children: React.ReactNode }>) {
-	const authData = await auth();
-
-	console.log({ authData });
-
 	return (
 		<html lang="en" className={`${jetbrainsMono.className}`}>
 			<body className="">
 				<TRPCReactProvider>
 					<Providers>
-						<Navbar nickname={authData?.nickname} />
+						<Navbar />
 						{children}
 						<Toaster />
 					</Providers>
