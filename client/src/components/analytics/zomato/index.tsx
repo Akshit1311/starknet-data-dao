@@ -1,6 +1,7 @@
 "use client";
 
 import { useAccount } from "@starknet-react/core";
+import { Loader } from "lucide-react";
 import type React from "react";
 
 import DownloadData from "~/components/download";
@@ -22,7 +23,7 @@ export type ZomatoChartData = {
 const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 	const { address } = useAccount();
 
-	const { data } = api.auth.providerInfo.useQuery(
+	const { data, isPending } = api.auth.providerInfo.useQuery(
 		{
 			// biome-ignore lint/style/noNonNullAssertion: <explanation>
 			address: address!,
@@ -150,6 +151,23 @@ const ZomatoAnalytics: React.FC<AnalyticsProps> = ({ analyticSlug }) => {
 
 	if (!address) {
 		return <div>Connect your wallet</div>;
+	}
+
+	if (data?.providerResult.length <= 0) {
+		return (
+			<div className="w-full flex items-center justify-center flex-col">
+				<p className="text-black">No data available :(</p>
+			</div>
+		);
+	}
+
+	if (isPending) {
+		return (
+			<div className="w-full flex items-center justify-center flex-col gap-4">
+				<Loader className="animate-spin" />
+				<p className="text-black">Crunching the latest stats for you...</p>
+			</div>
+		);
 	}
 
 	return (
