@@ -1,0 +1,149 @@
+"use client";
+
+import type { NextPage } from "next";
+import React from "react";
+import { RoughNotation, RoughNotationGroup } from "react-rough-notation";
+
+import abi from "~/abi/dao.abi.json";
+import { buttonVariants } from "~/components/ui/button";
+import {
+	Select,
+	SelectContent,
+	SelectGroup,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "~/components/ui/select";
+import { getProvider, type TProviderInfoKeys } from "~/constants";
+import { cn } from "~/lib/utils";
+import { api } from "~/trpc/react";
+
+import { Contract } from "starknet";
+import type { LeaderboardData } from "./_components/columns";
+import LeaderboardTable from "./_components/table";
+
+const LeaderboardPage: NextPage = () => {
+	const [provider, setProvider] =
+		React.useState<TProviderInfoKeys>("zomato-orders");
+	const [formattedUsers, setFormattedUsers] = React.useState<LeaderboardData[]>(
+		[],
+	);
+	const { data: users, isPending } = api.auth.leaderboard.useQuery();
+
+	React.useEffect(() => {
+		const fetchUserPoints = async () => {
+			if (!users) return;
+
+			const rpcProvider = getProvider();
+			if (!rpcProvider) {
+				alert("Please connect your wallet");
+				return;
+			}
+
+			const contract = new Contract(
+				abi,
+				"0x033c5fc7316f76f032047c175c0e61f58f59ca60933b9319577008cd937aa75e",
+				rpcProvider,
+			);
+
+			const companyIdx =
+				provider === "zomato-orders"
+					? 1
+					: provider === "nykaa-orders"
+						? 2
+						: provider === "linkedin-connections"
+							? 3
+							: 4;
+
+			try {
+				const usersWithPoints = await Promise.all(
+					users.map(async (user, index) => {
+						const points = await contract.call("get_points", [
+							user.userAddress,
+							companyIdx,
+						]);
+
+						return {
+							id: user.userId,
+							rank: index + 1,
+							name: user.nickname,
+							address: user.userAddress,
+							points: points.toString(),
+						};
+					}),
+				);
+
+				setFormattedUsers(usersWithPoints as LeaderboardData[]);
+			} catch (error) {
+				console.error("Error fetching points:", error);
+			}
+		};
+
+		fetchUserPoints();
+	}, [users, provider]);
+
+	if (isPending) {
+		return (
+			<div className="flex flex-col items-center justify-center bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] min-h-[100dvh] bg-background">
+				<p className="text-2xl text-primary">Loading...</p>
+			</div>
+		);
+	}
+
+	if (formattedUsers.length === 0) {
+		return (
+			<div className="flex flex-col items-center justify-center bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] min-h-[100dvh] bg-background">
+				<p className="text-2xl text-primary">No data available</p>
+			</div>
+		);
+	}
+
+	return (
+		<main className="flex flex-col items-center justify-center bg-[linear-gradient(to_right,#80808033_1px,transparent_1px),linear-gradient(to_bottom,#80808033_1px,transparent_1px)] bg-[size:70px_70px] min-h-[100dvh] bg-background">
+			<div className="mx-auto max-w-5xl w-full flex flex-col items-center gap-12">
+				<RoughNotationGroup show={true}>
+					<h1 className="text-4xl text-primary">
+						<RoughNotation
+							type="underline"
+							animationDuration={1500}
+							iterations={5}
+							color="#00C8EF"
+						>
+							Leaderboard
+						</RoughNotation>
+					</h1>
+				</RoughNotationGroup>
+
+				<div className="w-full flex flex-col items-end">
+					<Select
+						defaultValue="csv"
+						value={provider}
+						onValueChange={(val) => setProvider(val as TProviderInfoKeys)}
+					>
+						<SelectTrigger
+							className={cn(
+								buttonVariants({ variant: "noShadow" }),
+								"w-fit -mb-[56px] z-40",
+							)}
+						>
+							<SelectValue />
+						</SelectTrigger>
+
+						<SelectContent className="bg-white">
+							<SelectGroup>
+								<SelectItem value="zomato-orders">Zomato</SelectItem>
+								<SelectItem value="nykaa-orders">Nykaa</SelectItem>
+								<SelectItem value="linkedin-connections">LinkedIn</SelectItem>
+								<SelectItem value="uber-past-trips">Uber</SelectItem>
+							</SelectGroup>
+						</SelectContent>
+					</Select>
+
+					<LeaderboardTable data={formattedUsers} />
+				</div>
+			</div>
+		</main>
+	);
+};
+
+export default LeaderboardPage;

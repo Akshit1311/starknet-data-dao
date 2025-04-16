@@ -210,4 +210,39 @@ export const authRouter = createTRPCRouter({
 				providerResult: providerResult,
 			};
 		}),
+
+	providerInfoBySlug: publicProcedure
+		.input(
+			z.object({
+				analyticSlug: z.custom<TProviderInfoKeys>(),
+			}),
+		)
+		.query(async ({ input, ctx }) => {
+			const { analyticSlug } = input;
+
+			// biome-ignore lint/suspicious/noExplicitAny: <explanation>
+			let providerResult: any;
+
+			switch (analyticSlug) {
+				case "nykaa-orders":
+					providerResult = await ctx.db.select().from(nykaaOrders);
+					break;
+				case "linkedin-connections":
+					providerResult = await ctx.db.select().from(linkedinConnections);
+					break;
+				case "zomato-orders":
+					providerResult = await ctx.db.select().from(zomatoOrders);
+					break;
+				case "uber-past-trips":
+					providerResult = await ctx.db.select().from(uberPastTrips);
+					break;
+				default:
+					throw new TRPCError({
+						code: "BAD_REQUEST",
+						message: "Invalid provider slug",
+					});
+			}
+
+			return providerResult;
+		}),
 });

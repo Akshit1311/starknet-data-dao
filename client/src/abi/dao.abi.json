@@ -1,12 +1,12 @@
 [
     {
-        "type": "impl",
         "name": "ExternalImpl",
+        "type": "impl",
         "interface_name": "data_dao::data_dao::interface::IDataDao"
     },
     {
-        "type": "struct",
         "name": "core::integer::u256",
+        "type": "struct",
         "members": [
             {
                 "name": "low",
@@ -19,8 +19,8 @@
         ]
     },
     {
-        "type": "struct",
         "name": "core::byte_array::ByteArray",
+        "type": "struct",
         "members": [
             {
                 "name": "data",
@@ -37,8 +37,8 @@
         ]
     },
     {
-        "type": "struct",
         "name": "data_dao::data_dao::IReclaim::ClaimInfo",
+        "type": "struct",
         "members": [
             {
                 "name": "provider",
@@ -55,8 +55,8 @@
         ]
     },
     {
-        "type": "struct",
         "name": "data_dao::data_dao::IReclaim::CompleteClaimData",
+        "type": "struct",
         "members": [
             {
                 "name": "identifier",
@@ -81,8 +81,8 @@
         ]
     },
     {
-        "type": "struct",
         "name": "data_dao::data_dao::IReclaim::ReclaimSignature",
+        "type": "struct",
         "members": [
             {
                 "name": "r",
@@ -99,8 +99,8 @@
         ]
     },
     {
-        "type": "struct",
         "name": "data_dao::data_dao::IReclaim::SignedClaim",
+        "type": "struct",
         "members": [
             {
                 "name": "claim",
@@ -113,8 +113,8 @@
         ]
     },
     {
-        "type": "struct",
         "name": "data_dao::data_dao::IReclaim::Proof",
+        "type": "struct",
         "members": [
             {
                 "name": "id",
@@ -131,26 +131,30 @@
         ]
     },
     {
+        "name": "data_dao::data_modal::ContractData",
         "type": "struct",
-        "name": "data_dao::data_modal::UserPoints",
         "members": [
             {
-                "name": "user",
-                "type": "core::array::Array::<core::starknet::contract_address::ContractAddress>"
+                "name": "budget_token",
+                "type": "core::starknet::contract_address::ContractAddress"
             },
             {
-                "name": "points",
-                "type": "core::array::Array::<core::integer::u256>"
+                "name": "reclaim",
+                "type": "core::starknet::contract_address::ContractAddress"
+            },
+            {
+                "name": "owner",
+                "type": "core::starknet::contract_address::ContractAddress"
             }
         ]
     },
     {
-        "type": "interface",
         "name": "data_dao::data_dao::interface::IDataDao",
+        "type": "interface",
         "items": [
             {
-                "type": "function",
                 "name": "create_data_req",
+                "type": "function",
                 "inputs": [
                     {
                         "name": "budget",
@@ -165,8 +169,8 @@
                 "state_mutability": "external"
             },
             {
-                "type": "function",
                 "name": "store_user_points",
+                "type": "function",
                 "inputs": [
                     {
                         "name": "company_index",
@@ -189,8 +193,8 @@
                 "state_mutability": "external"
             },
             {
-                "type": "function",
                 "name": "upgrade",
+                "type": "function",
                 "inputs": [
                     {
                         "name": "class_hash",
@@ -201,9 +205,44 @@
                 "state_mutability": "external"
             },
             {
+                "name": "get_contract_settings",
                 "type": "function",
-                "name": "get_user_points",
+                "inputs": [],
+                "outputs": [
+                    {
+                        "type": "data_dao::data_modal::ContractData"
+                    }
+                ],
+                "state_mutability": "view"
+            },
+            {
+                "name": "get_user",
+                "type": "function",
                 "inputs": [
+                    {
+                        "name": "company_id",
+                        "type": "core::integer::u8"
+                    },
+                    {
+                        "name": "curr_index",
+                        "type": "core::integer::u256"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "type": "core::starknet::contract_address::ContractAddress"
+                    }
+                ],
+                "state_mutability": "view"
+            },
+            {
+                "name": "get_points",
+                "type": "function",
+                "inputs": [
+                    {
+                        "name": "user",
+                        "type": "core::starknet::contract_address::ContractAddress"
+                    },
                     {
                         "name": "company_id",
                         "type": "core::integer::u8"
@@ -211,7 +250,47 @@
                 ],
                 "outputs": [
                     {
-                        "type": "data_dao::data_modal::UserPoints"
+                        "type": "core::integer::u256"
+                    }
+                ],
+                "state_mutability": "view"
+            },
+            {
+                "name": "get_user_orders",
+                "type": "function",
+                "inputs": [
+                    {
+                        "name": "user",
+                        "type": "core::starknet::contract_address::ContractAddress"
+                    },
+                    {
+                        "name": "company_id",
+                        "type": "core::integer::u8"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "type": "core::integer::u256"
+                    }
+                ],
+                "state_mutability": "view"
+            },
+            {
+                "name": "get_company_index",
+                "type": "function",
+                "inputs": [
+                    {
+                        "name": "user",
+                        "type": "core::starknet::contract_address::ContractAddress"
+                    },
+                    {
+                        "name": "company_id",
+                        "type": "core::integer::u8"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "type": "core::integer::u256"
                     }
                 ],
                 "state_mutability": "view"
@@ -219,17 +298,17 @@
         ]
     },
     {
-        "type": "impl",
         "name": "OwnableTwoStepImpl",
+        "type": "impl",
         "interface_name": "openzeppelin_access::ownable::interface::IOwnableTwoStep"
     },
     {
-        "type": "interface",
         "name": "openzeppelin_access::ownable::interface::IOwnableTwoStep",
+        "type": "interface",
         "items": [
             {
-                "type": "function",
                 "name": "owner",
+                "type": "function",
                 "inputs": [],
                 "outputs": [
                     {
@@ -239,8 +318,8 @@
                 "state_mutability": "view"
             },
             {
-                "type": "function",
                 "name": "pending_owner",
+                "type": "function",
                 "inputs": [],
                 "outputs": [
                     {
@@ -250,15 +329,15 @@
                 "state_mutability": "view"
             },
             {
-                "type": "function",
                 "name": "accept_ownership",
+                "type": "function",
                 "inputs": [],
                 "outputs": [],
                 "state_mutability": "external"
             },
             {
-                "type": "function",
                 "name": "transfer_ownership",
+                "type": "function",
                 "inputs": [
                     {
                         "name": "new_owner",
@@ -269,8 +348,8 @@
                 "state_mutability": "external"
             },
             {
-                "type": "function",
                 "name": "renounce_ownership",
+                "type": "function",
                 "inputs": [],
                 "outputs": [],
                 "state_mutability": "external"
@@ -278,8 +357,8 @@
         ]
     },
     {
-        "type": "struct",
         "name": "data_dao::data_modal::Settings",
+        "type": "struct",
         "members": [
             {
                 "name": "fee_bps",
@@ -292,8 +371,8 @@
         ]
     },
     {
-        "type": "constructor",
         "name": "constructor",
+        "type": "constructor",
         "inputs": [
             {
                 "name": "settings",
@@ -314,164 +393,164 @@
         ]
     },
     {
-        "type": "event",
-        "name": "openzeppelin_security::reentrancyguard::ReentrancyGuardComponent::Event",
         "kind": "enum",
+        "name": "openzeppelin_security::reentrancyguard::ReentrancyGuardComponent::Event",
+        "type": "event",
         "variants": []
     },
     {
-        "type": "event",
+        "kind": "struct",
         "name": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred",
-        "kind": "struct",
+        "type": "event",
         "members": [
             {
+                "kind": "key",
                 "name": "previous_owner",
-                "type": "core::starknet::contract_address::ContractAddress",
-                "kind": "key"
+                "type": "core::starknet::contract_address::ContractAddress"
             },
             {
+                "kind": "key",
                 "name": "new_owner",
-                "type": "core::starknet::contract_address::ContractAddress",
-                "kind": "key"
+                "type": "core::starknet::contract_address::ContractAddress"
             }
         ]
     },
     {
-        "type": "event",
+        "kind": "struct",
         "name": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
-        "kind": "struct",
+        "type": "event",
         "members": [
             {
+                "kind": "key",
                 "name": "previous_owner",
-                "type": "core::starknet::contract_address::ContractAddress",
-                "kind": "key"
+                "type": "core::starknet::contract_address::ContractAddress"
             },
             {
+                "kind": "key",
                 "name": "new_owner",
-                "type": "core::starknet::contract_address::ContractAddress",
-                "kind": "key"
+                "type": "core::starknet::contract_address::ContractAddress"
             }
         ]
     },
     {
-        "type": "event",
+        "kind": "enum",
         "name": "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
-        "kind": "enum",
+        "type": "event",
         "variants": [
             {
+                "kind": "nested",
                 "name": "OwnershipTransferred",
-                "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred",
-                "kind": "nested"
+                "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred"
             },
             {
+                "kind": "nested",
                 "name": "OwnershipTransferStarted",
-                "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
-                "kind": "nested"
+                "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted"
             }
         ]
     },
     {
-        "type": "event",
+        "kind": "struct",
         "name": "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Upgraded",
-        "kind": "struct",
+        "type": "event",
         "members": [
             {
+                "kind": "data",
                 "name": "class_hash",
-                "type": "core::starknet::class_hash::ClassHash",
-                "kind": "data"
+                "type": "core::starknet::class_hash::ClassHash"
             }
         ]
     },
     {
-        "type": "event",
+        "kind": "enum",
         "name": "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Event",
-        "kind": "enum",
+        "type": "event",
         "variants": [
             {
+                "kind": "nested",
                 "name": "Upgraded",
-                "type": "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Upgraded",
-                "kind": "nested"
+                "type": "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Upgraded"
             }
         ]
     },
     {
-        "type": "event",
+        "kind": "struct",
         "name": "data_dao::data_dao::data_dao::data_dao::DataRequested",
-        "kind": "struct",
+        "type": "event",
         "members": [
             {
+                "kind": "key",
                 "name": "budget",
-                "type": "core::integer::u256",
-                "kind": "key"
+                "type": "core::integer::u256"
             },
             {
+                "kind": "key",
                 "name": "company_index",
-                "type": "core::integer::u8",
-                "kind": "key"
+                "type": "core::integer::u8"
             },
             {
+                "kind": "key",
                 "name": "buyer",
-                "type": "core::starknet::contract_address::ContractAddress",
-                "kind": "key"
+                "type": "core::starknet::contract_address::ContractAddress"
             }
         ]
     },
     {
-        "type": "event",
-        "name": "data_dao::data_dao::data_dao::data_dao::DataCollected",
         "kind": "struct",
+        "name": "data_dao::data_dao::data_dao::data_dao::DataCollected",
+        "type": "event",
         "members": [
             {
+                "kind": "key",
                 "name": "user",
-                "type": "core::starknet::contract_address::ContractAddress",
-                "kind": "key"
+                "type": "core::starknet::contract_address::ContractAddress"
             },
             {
+                "kind": "key",
                 "name": "user_orders",
-                "type": "core::integer::u256",
-                "kind": "key"
+                "type": "core::integer::u256"
             },
             {
+                "kind": "key",
                 "name": "company_index",
-                "type": "core::integer::u8",
-                "kind": "key"
+                "type": "core::integer::u8"
             },
             {
+                "kind": "key",
                 "name": "user_points",
-                "type": "core::integer::u256",
-                "kind": "key"
+                "type": "core::integer::u256"
             }
         ]
     },
     {
-        "type": "event",
-        "name": "data_dao::data_dao::data_dao::data_dao::Event",
         "kind": "enum",
+        "name": "data_dao::data_dao::data_dao::data_dao::Event",
+        "type": "event",
         "variants": [
             {
+                "kind": "flat",
                 "name": "ReentrancyGuardEvent",
-                "type": "openzeppelin_security::reentrancyguard::ReentrancyGuardComponent::Event",
-                "kind": "flat"
+                "type": "openzeppelin_security::reentrancyguard::ReentrancyGuardComponent::Event"
             },
             {
+                "kind": "flat",
                 "name": "OwnableEvent",
-                "type": "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
-                "kind": "flat"
+                "type": "openzeppelin_access::ownable::ownable::OwnableComponent::Event"
             },
             {
+                "kind": "flat",
                 "name": "UpgradeableEvent",
-                "type": "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Event",
-                "kind": "flat"
+                "type": "openzeppelin_upgrades::upgradeable::UpgradeableComponent::Event"
             },
             {
+                "kind": "nested",
                 "name": "DataRequested",
-                "type": "data_dao::data_dao::data_dao::data_dao::DataRequested",
-                "kind": "nested"
+                "type": "data_dao::data_dao::data_dao::data_dao::DataRequested"
             },
             {
+                "kind": "nested",
                 "name": "DataCollected",
-                "type": "data_dao::data_dao::data_dao::data_dao::DataCollected",
-                "kind": "nested"
+                "type": "data_dao::data_dao::data_dao::data_dao::DataCollected"
             }
         ]
     }

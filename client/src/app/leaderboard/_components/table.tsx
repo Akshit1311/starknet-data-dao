@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table";
 import React from "react";
 
-import { Button } from "~/components/ui/button";
+import { Button, buttonVariants } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
 	Table,
@@ -60,7 +60,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ data }) => {
 
 	return (
 		<div className="w-full font-base text-main-foreground">
-			<div className="flex items-center py-4">
+			<div className="flex items-center w-full justify-between py-4">
 				<Input
 					placeholder="Search name or address..."
 					value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -70,6 +70,7 @@ const LeaderboardTable: React.FC<LeaderboardTableProps> = ({ data }) => {
 					className="max-w-sm"
 				/>
 			</div>
+
 			<div>
 				<Table>
 					<TableHeader className="font-heading">

@@ -178,6 +178,11 @@ const Navbar = ({ nickname }: { nickname?: string | null }) => {
 			isActive: pathname.includes("/leaderboard"),
 		},
 		{
+			href: "/buyer",
+			text: "Buyer",
+			isActive: pathname.includes("/buyer"),
+		},
+		{
 			href: "/analytics",
 			text: "Analytics",
 			isActive: pathname.includes("/analytics"),
